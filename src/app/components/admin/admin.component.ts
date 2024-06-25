@@ -43,10 +43,6 @@ export class AdminComponent {
   }
 
   loginUser() {
-    // const username: string = this.adminDetails.get('username')?.value as string
-    // const password: string = this.adminDetails.get('password')?.value as string
-    //  console.log(this.adminDetails.get('username')?.value as string);
-    // console.log(this.adminDetails.get('password')?.value as string);
     if (this.adminDetails.valid) {
 
       this._authservice.login({

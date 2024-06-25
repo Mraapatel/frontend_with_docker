@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Socket, io } from 'socket.io-client'
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SocketIoService {
-  url = 'ws://localhost:5000';
+  backendUrl = environment.BACKEND_URL
+  url = environment.sockerUrl;
   option = {
     withcredentials: true,
     extraHeaders: {
-      'Access-control-Allow-Origin': 'http://localhost:4200',
+      'Access-control-Allow-Origin': `${this.backendUrl}`,
       'Access-control-Allow-Credentials': true
     }
   }

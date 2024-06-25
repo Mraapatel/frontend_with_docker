@@ -8,10 +8,9 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { RunningRequestService } from '../../services/running-request.service';
 import { BrowserNotificationService } from '../../services/browser-notification.service';
-import { HttpClient } from '@angular/common/http';
 import { loadStripe, Stripe } from '@stripe/stripe-js';
-import { HomeComponent } from '../home/home.component';
 import { Router } from '@angular/router'
+import { environment } from '../../../environments/environment.development';
 
 
 interface RideComp_Res {
@@ -37,11 +36,8 @@ export class ConfirmRideComponent {
   private _runningRequestService = inject(RunningRequestService);
   private _confirmRiedService = inject(ConfirmRideService);
   private _browserNotification = inject(BrowserNotificationService);
-  private _router = inject(Router)
-  private _http = inject(HttpClient);
-
-  private _home = inject(HomeComponent)
-
+  private _router = inject(Router);
+  backendUrl = environment.BACKEND_URL
 
   STRIPE!: Stripe | null;
   pageNumber: number = 1;
@@ -280,7 +276,7 @@ export class ConfirmRideComponent {
           this._toster.success(res.driverPayment, 'Success');
           let index = this.RidesFetched.findIndex((r) => r._id == res.rideId);
           this.RidesFetched.splice(index, 1);
-          this._router.navigate(['home/rideHistory'] )
+          this._router.navigate(['home/rideHistory'])
         }
       }
     })
@@ -298,20 +294,6 @@ export class ConfirmRideComponent {
       this.ridePicked(rideId, driverId!)
     } else if (rideStatus === 3) {
       this.rideCompleted(rideId, driverId!)
-      // let clientKey
-      // this._http.post('http://localhost:5000/test', {}).subscribe({
-      //   next: (res) => {
-      //     clientKey = res
-      //   }
-      // });
-      // const items = [{ id: "xl-tshirt" }];
-      // const appearance = {
-      //   theme: 'stripe',
-      // };
-
-      // let   elements = this.STRIPE!.elements({ appearance, clientKey });
-
-
     }
   }
 
@@ -386,7 +368,7 @@ export class ConfirmRideComponent {
             if (res.includes(r._id)) {
               this.RidesFetched[index].driverId = null
               this.RidesFetched[index].rideStatus = 9
-              this.notify(this.RidesFetched[index].userId.userName )
+              this.notify(this.RidesFetched[index].userId.userName)
             }
           })
 
@@ -410,10 +392,10 @@ export class ConfirmRideComponent {
 
         let index = this.RidesFetched.findIndex((r) => r._id === this.selectedRide._id)
         // if (this.RidesFetched[index].nearest) {
-          this.RidesFetched[index].nearest = true;
-          // this.RidesFetched[index].nearest = res.nearest;
-          this.selectedRide.nearest = true;
-          // this.selectedRide.nearest = res.nearest;
+        this.RidesFetched[index].nearest = true;
+        // this.RidesFetched[index].nearest = res.nearest;
+        this.selectedRide.nearest = true;
+        // this.selectedRide.nearest = res.nearest;
         // }
       }
     })

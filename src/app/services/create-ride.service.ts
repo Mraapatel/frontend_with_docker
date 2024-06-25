@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { CountryForRide ,CitiesForCreateRide ,cityPricingforTypesResponse} from '../models/models.interface';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +10,7 @@ export class CreateRideService {
 
   private _http = inject(HttpClient);
 
-  url = 'http://localhost:5000/pricing/fetchCountries';
+  url = `${environment.BACKEND_URL}pricing/fetchCountries`;
   constructor() { }
 
   getCountryCodes() {
@@ -17,19 +18,19 @@ export class CreateRideService {
   }
 
   getCities(data:string) {
-    return this._http.post<CitiesForCreateRide>(`http://localhost:5000/pricing/getCity`, {countryId:data})
+    return this._http.post<CitiesForCreateRide>(`${environment.BACKEND_URL}pricing/getCity`, {countryId:data})
   }
 
   getCityPricing(cityId:string) {
-    return this._http.post<cityPricingforTypesResponse>(`http://localhost:5000/pricing/getCityPricig`, {cityId:cityId})
+    return this._http.post<cityPricingforTypesResponse>(`${environment.BACKEND_URL}pricing/getCityPricig`, {cityId:cityId})
   }
 
   storeRide(rideDetails:object){
-    return this._http.post('http://localhost:5000/createRide/storeRide' ,rideDetails)
+    return this._http.post(`${environment.BACKEND_URL}createRide/storeRide` ,rideDetails)
   }
 
   checkForStartingPoint(latLng:object){
-    return this._http.post('http://localhost:5000/createRide/checkForStartingPoint' ,latLng)
+    return this._http.post(`${environment.BACKEND_URL}createRide/checkForStartingPoint` ,latLng)
   }
 
 

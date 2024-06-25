@@ -1,14 +1,15 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Ride, VehicleType } from '../models/models.interface';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ConfirmRideService {
 
-  url = 'http://localhost:5000/confirmRide';
-  url2 = 'http://localhost:5000/runningRequest';
+  url = `${environment.BACKEND_URL}confirmRide`;
+  url2 = `${environment.BACKEND_URL}runningRequest`;
 
 
   private _http = inject(HttpClient);

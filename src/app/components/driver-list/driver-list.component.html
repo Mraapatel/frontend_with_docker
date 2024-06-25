@@ -141,7 +141,8 @@
             @for(driver of driverFatched;track driver ){
             <tr class="text-center border shadow-sm mt-3">
                 <td>{{driver.driverName}}</td>
-                <td> <img [src]="'http://localhost:5000/public/driverProfile/' + driver.driverProfile"
+                <!-- <td> <img [src]="'http://localhost:5000/public/driverProfile/' + driver.driverProfile" -->
+                <td> <img [src]="backendUrl + 'public/driverProfile/' + driver.driverProfile"
                         onerror="this.src='assets/noImageFound.jpg'" class="my-1 border profile rounded img-fluid "
                         alt="{{ driver.driverName }} Icon">
                 </td>

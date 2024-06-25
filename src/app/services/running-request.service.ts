@@ -4,6 +4,7 @@ import { Observable, Subscriber, catchError, of, tap } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { assignedRidesWithDriver } from '../models/models.interface';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,7 @@ export class RunningRequestService {
   private _http = inject(HttpClient);
 
   currentRunningRequests!: assignedRidesWithDriver;
-  url = 'http://localhost:5000/runningRequest';
+  url = `${environment.BACKEND_URL}runningRequest`;
 
 
 

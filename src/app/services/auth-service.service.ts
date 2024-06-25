@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, Subject, Subscription, catchError, of, swi
 import { BnNgIdleService } from 'bn-ng-idle'
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from '../../environments/environment.development';
 
 
 interface TokenResponse {
@@ -18,6 +19,7 @@ export class AuthServiceService {
   private bnIdle = inject(BnNgIdleService);
   private router = inject(Router);
   private _tostr = inject(ToastrService);
+  private backendUrl = environment.BACKEND_URL
 
   private idleTimeout: number = 20 * 60 * 1000;
   // private idleTimeout: number = 5;
@@ -66,8 +68,7 @@ export class AuthServiceService {
   }
 
   login(user: { username: string, password: string }) {
-    return this.http.post<TokenResponse>('http://localhost:5000/authenticate', user)
-    // return this.http.post<TokenResponse>('http://backend:5000/authenticate', user)
+    return this.http.post<TokenResponse>(`${this.backendUrl}authenticate`, user)
       .pipe(
         tap((response) => {
           this.doLoginAdmin(user.username, response);

@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment.development';
   providedIn: 'root'
 })
 export class AddCountryService {
+
   backendUrl!: string
   constructor() {
     this.backendUrl = environment.BACKEND_URL
@@ -24,7 +25,7 @@ export class AddCountryService {
   addCountry(formdata: object) {
     console.log('in service');
     console.log(formdata);
-    return this._http.post('http://localhost:5000/country', formdata).pipe(
+    return this._http.post(`${this.backendUrl}country`, formdata).pipe(
       tap((_) => {
         console.log('country added');
       })
@@ -32,7 +33,7 @@ export class AddCountryService {
   }
 
   serchCountries(value: string) {
-    return this._http.post('http://localhost:5000/country/searchCountry', { search: value }).pipe(
+    return this._http.post(`${this.backendUrl}country/searchCountry`, { search: value }).pipe(
       tap((_) => {
         console.log('got countries');
       })

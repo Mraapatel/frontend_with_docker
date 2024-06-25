@@ -5,6 +5,7 @@ import { VehicleTypeService } from '../../services/vehicle-type.service';
 import { ToastrService } from 'ngx-toastr';
 import { ValidateImageObj } from '../../models/models.interface';
 import { catchError, of, tap } from 'rxjs';
+import { environment } from '../../../environments/environment.development';
 // import { ValidateImageObj } from "../models/models.interface";
 
 
@@ -25,6 +26,7 @@ export class VehicleTypeComponent {
   @ViewChild('vehicleTable') table!: ElementRef;
 
   // injections
+  backendUrl = environment.BACKEND_URL
   private _fb = inject(FormBuilder);
   private _vehicleTypeService = inject(VehicleTypeService);
   private _tostrService = inject(ToastrService);

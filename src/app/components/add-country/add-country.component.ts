@@ -5,7 +5,6 @@ import { AddCountryService } from '../../services/add-country.service';
 import { Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { catchError, tap, throwError } from 'rxjs';
-import { TitleStrategy } from '@angular/router';
 
 interface Country {
   _id: string;
@@ -39,20 +38,17 @@ export class AddCountryComponent {
   flagSymbol!: string;
   serchInput!: string;
   countryCode2!: string;
-  // fetchedData!: {
   checkCountry!: string
   checkCurrency!: string
   checkCountryCallingCode!: string
   checkCountryCode!: string
   regEx = /^[a-zA-Z0-9\s]*$/
-  // }
 
 
   ngOnInit() {
     this._addCountry.getCountry().subscribe((response) => {
       this.Countries = response as Country[]
       console.log(this.Countries);
-      // console.log(response);
     })
   }
 
@@ -96,24 +92,15 @@ export class AddCountryComponent {
         this.timeZone = response[0].timezones[0];
         this.flagSymbol = response[0].flags.png as string;
         this.countryCode2 = response[0].cca2;
-        console.log('++++++++++++++++++++++++++++');
-        console.log(response[0].cca2);
+        // console.log('++++++++++++++++++++++++++++');
+        // console.log(response[0].cca2);
 
-        console.log(this.timeZone);
-        console.log(this.flagSymbol);
-        // this.fetchedData.country = country
-        // this.fetchedData.currency = currency
-        // this.fetchedData.countryCallingCode = countryCallingCode
-        // this.fetchedData.countryCode = countryCode
+        // console.log(this.timeZone);
+        // console.log(this.flagSymbol);
         this.checkCountry = country
         this.checkCurrency = currency
         this.checkCountryCallingCode = countryCallingCode
-        this.checkCountryCode = countryCode
-        console.log(typeof (countryCallingCode));
-        console.log(typeof (currency));
-        console.log(typeof (countryCode));
-        console.log(typeof (country));
-
+        this.checkCountryCode = countryCode;
 
         this.Country.patchValue({
           country: country,
@@ -123,7 +110,7 @@ export class AddCountryComponent {
         })
       });
     } else {
-      if(this.checkCountry){
+      if (this.checkCountry) {
         this._toaster.warning('Please change Country after submitting', 'Warning');
         return;
       }
@@ -139,7 +126,7 @@ export class AddCountryComponent {
     this.Country.reset();
   }
 
-  dissableFields(){
+  dissableFields() {
     Object.keys(this.Country.controls).forEach(controlName => {
       const control = this.Country.get(controlName);
       control?.disable(); // Disable each control
@@ -147,58 +134,7 @@ export class AddCountryComponent {
   }
 
   addCountry() {
-    //   console.log('yoo');
-    //   const countryName = this.Country.get('country').value;
-
-    //   this._http.get(`https://restcountries.com/v3.1/name/${countryName}`).subscribe((response: any) => {
-    //     console.log(response); // Handle the response here
     let isexecute = false;
-    //     let currency = Object.keys(response[0].currencies)[0];
-    //     let country = response[0].name.common;
-    //     let countryCode = response[0].cca3
-    //     let countryCallingCode;
-    //     let first = response[0].idd.root;
-    //     if (response[0].idd.suffixes.length == 1) {
-    //       let suffixe = response[0].idd.suffixes[0];
-    //       countryCallingCode = `${first}${suffixe}`;
-    //     } else {
-    //       countryCallingCode = `${first}`;
-    //     };
-
-    //     // this.timeZone = response[0].timezones[0],
-    //     //   this.flagSymbol = response[0].flags.png as string,
-    //     //   console.log('++++++++++++++++++++++++++++');
-    //     //   console.log(this.timeZone);
-    //     //   console.log(this.flagSymbol);
-
-
-
-
-    // this.Countries.forEach((Country) => {
-    //   if (Country.country === country) {
-    //     console.log('condition true-----------------------------');
-    //     this._toaster.warning('The Enterd Country Exist already', 'Warning');
-    //     isexecute = true;
-    //   }
-    // });
-    // if (isexecute) {
-    //   this.Country.reset();
-    //   return;
-    // }
-
-    //     this.Country.patchValue({
-    //       country: country,
-    //       currency: currency,
-    //       countryCallingCode: countryCallingCode,
-    //       countryCode: countryCode
-    //     })
-
-    // Country = this._fb.group({
-    //   country: ['', Validators.required],
-    //   currency: [{ value: '', disabled: true }],
-    //   countryCode: [{ value: '', disabled: true }],
-    //   countryCallingCode: [{ value: '', disabled: true }]
-    // })
     let currency = this.Country.get('currency')!.value;
     let country = this.Country.get('country')!.value;
     let countryCode = this.Country.get('countryCode')!.value;
@@ -223,7 +159,6 @@ export class AddCountryComponent {
         return;
       }
 
-
       let data = {
         currency: currency,
         country: country,
@@ -236,20 +171,15 @@ export class AddCountryComponent {
 
       console.log('iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii');
       console.log(this.countryCode2);
-      console.log(data);
-
-
-      // console.log(response[0].flags.png);
-      // console.log(response[0].timezones[0]);
       this.addCountryToServer(data);
 
     } else {
       this._toaster.warning("Please don't modify the suggested entries", "Warning");
       this.Country.patchValue({
-        country:this.checkCountry,
-        currency:this.checkCurrency,
-        countryCallingCode:this.checkCountryCallingCode,
-        countryCode:this.checkCountryCode
+        country: this.checkCountry,
+        currency: this.checkCurrency,
+        countryCallingCode: this.checkCountryCallingCode,
+        countryCode: this.checkCountryCode
       });
       this.dissableFields()
       return;
@@ -258,14 +188,9 @@ export class AddCountryComponent {
   }
 
   addCountryToServer(data: any) {
-    console.log('data going to be stored',data);
-    
+    console.log('data going to be stored', data);
+
     this._addCountry.addCountry(data).subscribe((data) => {
-      console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
-
-      console.log(data);
-
-      console.log(data);
       this.Countries.push(data)
       this.Country.reset();
       this.serched = false
@@ -287,7 +212,6 @@ export class AddCountryComponent {
 
 
     this._addCountry.serchCountries(value.trim()).subscribe((response) => {
-      // console.log(response);
       this.serchedCountries = response as Country[]
       if (this.serchedCountries.length < -1 || this.serchedCountries.length == 0) {
         this.serched = false;

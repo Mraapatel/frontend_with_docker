@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Pricing } from '../models/models.interface';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -8,18 +9,19 @@ import { Pricing } from '../models/models.interface';
 export class PricingserviceService {
 
   private _http = inject(HttpClient);
+  backendUrl = environment.BACKEND_URL
 
   storePricing(data:object){
-    return this._http.post<Pricing>('http://localhost:5000/pricing/add',data)
+    return this._http.post<Pricing>(`${this.backendUrl}pricing/add`,data)
   }
   constructor() { }
 
   getAllPricing(){
-    return this._http.get<Pricing[]>('http://localhost:5000/pricing/fetch')
+    return this._http.get<Pricing[]>(`${this.backendUrl}pricing/fetch`)
   }
 
   updatePrice(Price:object){
-    return this._http.post<Pricing>('http://localhost:5000/pricing/update',Price)
+    return this._http.post<Pricing>(`${this.backendUrl}pricing/update`,Price)
   }
 
 

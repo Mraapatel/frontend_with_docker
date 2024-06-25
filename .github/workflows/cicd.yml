@@ -1,0 +1,32 @@
+name: Deploy angular Application
+
+on:
+  push: 
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+      # - name: Create .env file
+      #   run: echo "MONGODBATLAS=${{ secrets.MONGODBATLAS }}" >> .env
+      - name: Login to docker hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}       
+      - name: Build docker image
+        run: docker build -t ninjahathodi/frontend .  
+      - name: Publish image to docker hub
+        run: docker push ninjahathodi/frontend:latest
+        
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull image from docker hub
+        run: docker pull ninjahathodi/frontend:latest
+      - name: Delete old container
+        run: docker rm -f frontend-container  
+      - name: Run docker container
+        run: docker run -d -p 4000:5000 --name frontend-container ninjahathodi/frontend  

@@ -8,6 +8,7 @@ import { DriverListService } from '../../services/driver-list.service';
 import { VehicleTypeService } from '../../services/vehicle-type.service';
 import { CommonModule } from '@angular/common';
 import { loadStripe, Stripe } from '@stripe/stripe-js';
+import { environment } from '../../../environments/environment.development';
 
 
 interface CountryInfo {
@@ -41,6 +42,7 @@ export class DriverListComponent {
   private _driverListService = inject(DriverListService);
   private _tostr = inject(ToastrService);
   private _vehicleTypeService = inject(VehicleTypeService);
+  backendUrl  = environment.BACKEND_URL
 
 
   STRIPE!: Stripe | null;

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Ride } from '../models/models.interface';
+import { environment } from '../../environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ import { Ride } from '../models/models.interface';
 export class RideHistoryService {
 
   private _http = inject(HttpClient);
-  private url = 'http://localhost:5000/rideHistory';
+  private url = `${environment.BACKEND_URL}rideHistory`;
 
 
   fetchRides(data:object) {

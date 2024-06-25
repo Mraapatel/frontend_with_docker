@@ -5,6 +5,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Ride, assignedRidesWithDriver } from '../../models/models.interface';
 import { RunningRequestService } from '../../services/running-request.service';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../environments/environment.development';
 
 @Component({
   selector: 'app-running-request',
@@ -22,6 +23,7 @@ export class RunningRequestComponent {
   runningRequests: Array<assignedRidesWithDriver> = [];
   selectedRidesInfo!: Ride;
   TimeOut!: number | undefined;
+  backendUrl = environment.BACKEND_URL
 
   ngOnInit() {
     let data = {

@@ -49,7 +49,8 @@
             <div class="input-group">
                 <select class="select-small border " name="countryCallingCode" formControlName="countryCallingCode">
                     @for(code of CountryCodes ;track code){
-                    <option class="bg-dark text-white" value="{{code.countryId}}">{{code.countryCallingCode}} ({{code.country}})</option>
+                    <option class="bg-dark text-white" value="{{code.countryId}}">{{code.countryCallingCode}}
+                        ({{code.country}})</option>
                     }
                 </select>
                 @if(countryCallingCode !== null && (countryCallingCode.touched || countryCallingCode.dirty)){
@@ -124,7 +125,8 @@
             @for(user of userFatched;track user ){
             <tr class="text-center border shadow-sm mt-3">
                 <td>{{user.userName}}</td>
-                <td> <img [src]="'http://localhost:5000/public/userProfile/' + user.userProfile"
+                <!-- <td> <img [src]="`${backendurl}public/userProfile/` + user.userProfile" -->
+                <td> <img [src]="backendUrl + 'public/userProfile/' + user.userProfile"
                         onerror="this.src='assets/noImageFound.jpg'" class="my-1 border profile rounded img-fluid "
                         alt="{{ user.userName }} Icon">
                 </td>
@@ -183,7 +185,7 @@
                                 value="{{card.cardId}}" [checked]="card.cardId === defaultCardId"
                                 [checked]="card.cardId === defaultCardId" (change)="onCardSelected(card.cardId)">
                         </th>
-                        <th class="text-start" >
+                        <th class="text-start">
                             <span class="text-primary border rounded-top border-bottom-0 border-end-0 border-start-0">
                                 {{card.brand}}</span>
                             @if(card.cardId == defaultCardId){
@@ -193,7 +195,7 @@
 
                         </th>
                         <td class="text-danger "><b>Exp:</b>
-                        {{card.exp_month  +"/"+card.exp_year}}
+                            {{card.exp_month +"/"+card.exp_year}}
                         </td>
                         <td>
                             <button class="btn btn-sm btn-danger delete shadow"

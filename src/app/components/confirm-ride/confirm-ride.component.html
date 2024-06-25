@@ -208,7 +208,8 @@
                     @for(driver of ActiveDrivers ; track $index){
                     <tr class="border-bottom">
                         <td>
-                            <img [src]="'http://localhost:5000/public/driverProfile/' + driver.driverProfile"
+                            <!-- <img [src]="'http://localhost:5000/public/driverProfile/' + driver.driverProfile" -->
+                            <img [src]="backendUrl + 'public/driverProfile/' + driver.driverProfile"
                                 onerror="this.src='assets/noImageFound.jpg'"
                                 class="my-1 border profile rounded img-fluid " alt="{{ driver.driverName }} Icon">
                         </td>
@@ -248,13 +249,7 @@
                         <th>User-id: </th>
                         <td>: {{selectedRide.userId._id}}</td>
                     </tr>
-                    <!-- <tr>
-                        <img [src]="'http://localhost:5000/public/userProfile/' + selectedRide.userId.userProfile"
-                            onerror="this.src='assets/noImageFound.jpg'" class="my-1 border profile rounded img-fluid "
-                            alt="{{selectedRide.userId.userName }} Icon">
-
-                    </tr> -->
-                    <tr>
+                                      <tr>
                         <th>User Name </th>
                         <td>: {{selectedRide.userId.userName}}</td>
                     </tr>
@@ -326,7 +321,8 @@
             @if(rideInfoOfSelectedRide){
             <div class="text-center my-1">
 
-                <img [src]="'http://localhost:5000/public/userProfile/' + rideInfoOfSelectedRide.userId.userProfile"
+                <!-- <img [src]="'http://localhost:5000/public/userProfile/' + rideInfoOfSelectedRide.userId.userProfile" -->
+                <img [src]="backendUrl + 'public/userProfile/' + rideInfoOfSelectedRide.userId.userProfile"
                     onerror="this.src='assets/noImageFound.jpg'" class="my-1 border profile2 rounded img-fluid "
                     alt="{{rideInfoOfSelectedRide.userId.userName }} Icon">
             </div>

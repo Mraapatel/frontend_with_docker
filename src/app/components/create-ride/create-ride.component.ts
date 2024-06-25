@@ -442,7 +442,7 @@ export class CreateRideComponent {
       //   return;
       // }
     }
-    // console.log('checkForPlace finished------>');
+    console.log('checkForPlace finished------>');
   }
 
 

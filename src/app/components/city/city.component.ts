@@ -322,18 +322,6 @@ export class CityComponent {
       this._toastr.warning('Please enter all the details', 'Warning');
       return;
     }
-    // if (this.coordinates.length < 2) {
-    //   console.log('please draw the proper area');
-    //   this._toastr.warning('Please draw the area properly', 'Warning')
-    //   return;
-    // }
-    // if (this.countryForm.get('city')?.value !== this.cityName ) {
-    //   console.log(this.countryForm.get('city')?.value);
-    //   console.log(this.cityName);
-
-    //   this._toastr.error("Please don't modify the city/country name", "Error");
-    //   return;
-    // }
 
     let placeInfo = {
       countryId: this.countryId,
@@ -380,7 +368,6 @@ export class CityComponent {
   }
 
   cityChoosed(city: Cities) {
-
     console.log('cityChoosed', city.zone.coordinates[0]);
     let updatedCords = city.zone.coordinates[0].map(pair => ({
       lat: pair[1], // Assuming latitude is at index 1
@@ -397,8 +384,6 @@ export class CityComponent {
       this.polygon.setMap(null); // Remove polygon from map
       this.polygon = null; // Reset polygon variable
     }
-    // let coordinates = city.zone.coordinates;
-
 
     this.polygon = new google.maps.Polygon({
       paths: updatedCords,
@@ -471,7 +456,6 @@ export class CityComponent {
       if (index > -1) {
         this.cityList[index] = updatedZone
       }
-      // console.log(res);
     }, (error) => {
       this._toastr.error('Some Error Occured', 'Error');
     })

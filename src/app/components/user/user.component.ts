@@ -5,6 +5,7 @@ import { catchError, of, tap } from 'rxjs';
 import { Country, UserData, Card } from '../../models/models.interface';
 import { UserService } from '../../services/user.service';
 import { ToastrService } from 'ngx-toastr';
+import { environment } from '../../../environments/environment.development';
 
 @Component({
   selector: 'app-user',
@@ -21,6 +22,7 @@ export class UserComponent {
   private _userService = inject(UserService);
   private _tostr = inject(ToastrService);
 
+  backendUrl = environment.BACKEND_URL
   userForm!: FormGroup;
   // userUpdateForm!: FormGroup;
   userFatched!: Array<UserData>;

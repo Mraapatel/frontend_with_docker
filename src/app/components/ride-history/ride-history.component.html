@@ -203,7 +203,8 @@
                     <h5 class=" ms-3 text-primary">User Info :</h5>
                     <div class="ms-4 my-1">
 
-                        <img [src]="'http://localhost:5000/public/userProfile/' + selectedRide.userId.userProfile"
+                        <!-- <img [src]="'http://localhost:5000/public/userProfile/' + selectedRide.userId.userProfile" -->
+                        <img [src]="backendUrl + 'public/userProfile/' + selectedRide.userId.userProfile"
                             onerror="this.src='assets/noImageFound.jpg'" class="my-1 border profile2 rounded img-fluid "
                             alt="{{selectedRide.userId.userName }} Icon">
                     </div>
@@ -274,7 +275,8 @@
 
                         <div class="ms-4 my-1">
 
-                            <img [src]="'http://localhost:5000/public/driverProfile/' + selectedRide.driverId.driverProfile"
+                            <!-- <img [src]="'http://localhost:5000/public/driverProfile/' + selectedRide.driverId.driverProfile" -->
+                            <img [src]="backendUrl + 'public/driverProfile/' + selectedRide.driverId.driverProfile"
                                 onerror="this.src='assets/noImageFound.jpg'"
                                 class="my-1 border profile2 rounded img-fluid "
                                 alt="{{selectedRide.driverId.driverProfile }} Icon">

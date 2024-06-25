@@ -31,7 +31,8 @@ export class RideHistoryComponent {
   private _rideHistory = inject(RideHistoryService);
   private _toster = inject(ToastrService);
   private _fb = inject(FormBuilder);
-  private _confirmRideService = inject(ConfirmRideService)
+  private _confirmRideService = inject(ConfirmRideService);
+  backendUrl  = environment.BACKEND_URL
 
   RidesFetched: Ride[] = [];
   rideHistory!: FormGroup;

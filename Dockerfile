@@ -4,13 +4,15 @@ FROM node:alpine as build
 WORKDIR /app
 
 COPY package.json  ./
-RUN npm install
+RUN npm ci
 
 COPY . .
 RUN npm run build
 
 # Stage 2: Serve the Angular application with Nginx
 FROM nginx:alpine
+WORKDIR /usr/share/nginx/html
+RUN rm -rf *
 
 # Copy built Angular app from Stage 1
 COPY --from=build /app/dist/browser /usr/share/nginx/html

@@ -135,7 +135,8 @@
                         <span>{{ vehicle.vehicleType }}</span>
                     </td>
                     <td class="ns m-1 text-center">
-                        <img [src]="'http://localhost:5000/public/vehicleTypes/' + vehicle.vehicleIcon"
+                        <!-- <img [src]="'http://localhost:5000/public/vehicleTypes/' + vehicle.vehicleIcon" -->
+                        <img [src]="backendUrl +'public/vehicleTypes/' + vehicle.vehicleIcon"
                             onerror="this.src='assets/noImageFound.jpg'" class="my-1 border icons rounded img-fluid "
                             alt="{{ vehicle.vehicleType }} Icon">
                     </td>
