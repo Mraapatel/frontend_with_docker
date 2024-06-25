@@ -1,0 +1,406 @@
+<div>
+    <form [formGroup]="confirmRideForm">
+        <div class="input-group my-3">
+            <label for="vechicleType" class="mt-1">Vehicle Type :</label>
+            <select name="vechicleType" id="" class="ms-1 form-select me-3 rounded" formControlName="vechicleType">
+                @if(fetchedVehicleTypes){
+                @for(type of fetchedVehicleTypes ; track $index){
+                <option value="{{type._id}}"> {{type.vehicleType}} </option>
+                }
+                }
+            </select>
+            <input type="date" class="form-control rounded" placeholder="please select the date" formControlName="date">
+            <div class="input-group-append">
+                <div class="input-group-text bg-dark text-white">Select Date</div>
+            </div>
+        </div>
+
+        <div class="input-group mb-2">
+            <label for="rideStatus" class="mt-1 me-1">Ride Status :</label>
+            <select class="form-select me-3 ms-2 rounded" name="rideStatus" formControlName="rideStatus">
+                <option value="0">Pending</option>
+                <option value="1">Assigning</option>
+                <option value="5">Accepted</option>
+                <option value="2">Arrived</option>
+                <option value="3">Picked</option>
+                <option value="4">Started</option>
+                <option value="2">Confirmed</option>
+            </select>
+            <input type="text" class="form-control rounded" name="searchTerm" #inputValue
+                (keyup.enter)="searchRides(inputValue.value)"
+                placeholder=" search by username, phone number, RideId,etc...." formControlName="searchTerm">
+            <div class="input-group-append ">
+                <div class="input-group-text bg-dark text-white ps-3 ">Apply filter</div>
+            </div>
+        </div>
+
+        <button (click)="searchRides(inputValue.value)" class="btn btn-success text-white btn-sm my-2">Apply
+            Filter</button>
+        <button (click)="ClearFilter()" class=" ms-2 btn btn-warning text-white btn-sm my-2">clear Filter</button>
+    </form>
+    <div class="table-responsive rounded ">
+
+        <div class="container text-center h2">
+            Confirm Ride
+        </div>
+        <!-- <div class="d-flex justify-content-center align-items-end my-2">
+
+            <button [disabled]="disablePrevBnt()" class="btn btn-dark text-white me-3 shadow"
+                (click)="previousBtn()">Prev</button>
+            <span class="text-center span me-3 pb-3 h-2 ">{{pageNumber}}</span>
+            <button [disabled]="disableNextBnt()" class="btn" class="btn btn-dark text-white shadow"
+                (click)="nextBtn()">Next</button>
+        </div> -->
+        <table class="table table-responsive  overflow-auto">
+            <tr>
+                <th class="border text-center p-1 py-2 bg-dark text-white id">Ride Id</th>
+                <!-- <th class="border text-center p-1 py-2 bg-dark text-white id">User Id</th> -->
+                <th class="border text-center p-1 py-2 bg-dark text-white">Pick Up Time</th>
+                <th class="border text-center p-1 py-2 bg-dark text-white">User Name</th>
+                <th class="border text-center p-1 py-2 bg-dark text-white width">Pick up address</th>
+                <th class="border text-center p-1 py-2 bg-dark text-white">Drop off address</th>
+                <th class="border text-center p-1 py-2 bg-dark text-white">Service Type</th>
+                <th class="border text-center p-1 py-2 bg-dark text-white">Status</th>
+                <th class="border text-center p-1 py-2 bg-dark text-white">Assign</th>
+                <th class="border text-center p-1 py-2 bg-dark text-white">Action</th>
+            </tr>
+            @if(RidesFetched){
+            @for(ride of RidesFetched;track $index){
+            <tr class="hover rounded shadow">
+                <td class="border text-center p-1 py-2 id">{{ride.Ride_index}}</td>
+                <!-- <td class="border text-center p-1 py-2 id">{{ride.userId._id}}</td> -->
+                <td class="border text-center p-1 py-2">{{ride.date}}</td>
+                <td class="border text-center p-1 py-2">{{ride.userId.userName}}</td>
+                <td class="border text-center p-1 py-2 width">{{ride.startLocation}}</td>
+                <td class="border text-center p-1 py-2 width">{{ride.endLocation}}</td>
+                <td class="border text-center p-1 py-2">{{ride.typeId.vehicleType}}</td>
+                <td class="border text-center p-1 py-2">
+                    <!-- status -->
+                    <button class="btn"
+                        [ngStyle]="{ 'background-color': ride.rideStatus === 0 ? 'lightblue' : ride.rideStatus === 1 ? 'yellow' : ride.rideStatus ===  5? 'green' : ride.rideStatus ===  6? 'blue' :ride.rideStatus ===  3? 'purple' : ride.rideStatus ===  4? 'lightgreen': ride.rideStatus ===  2? 'violet': 'lightblue' ,   'color': ride.rideStatus === 5 ? 'white' : ride.rideStatus === 3 ? 'white' : 'black' }">
+
+                        @switch(ride.rideStatus){
+                        @case(1){
+                        Assigning
+                        }
+                        @case(2){
+                        Arrived
+                        }
+                        @case(3){
+                        Picked
+                        }
+                        @case(4){
+                        Started
+                        }
+                        @case(5){
+                        Accepted
+                        }
+                        @case(6){
+                        hold
+                        }
+                        @default{
+                        pending
+                        }
+                        }
+                    </button>
+
+                </td>
+                <td class="border text-center p-1 py-2">
+                    <!-- Assign -->
+                    @if(ride.driverId?.driverName ){
+                    <div class="btn"
+                        [ngStyle]="{ 'background-color': ride.rideStatus === 0 ? 'lightblue' : ride.rideStatus === 1 ? 'orange' : ride.rideStatus === 5 ? 'green' : ride.rideStatus === 3 ? 'green' : ride.rideStatus === 4 ? 'green'  : ride.rideStatus === 2 ? 'green': 'sky' ,'color': ride.rideStatus === 5 ? 'white' : ride.rideStatus === 3 ? 'white' : ride.rideStatus === 4 ? 'white'  : ride.rideStatus === 2 ? 'white': 'black'  }">
+                        {{ride.driverId?.driverName}}
+                    </div>
+                    }@else{
+                    <button class="btn btn-info" (click)="AssingBtnClicked(ride)" data-bs-toggle="modal"
+                        data-bs-target="#AssignModal"
+                        [ngStyle]="{ 'background-color': ride.rideStatus === 0 ? 'lightblue' : ride.rideStatus === 1 ? 'orange' : ride.rideStatus === 2 ? 'green' :  ride.rideStatus === 6 ? 'transperent' : 'lightblue' }">
+                        @if(ride.rideStatus === 9){
+                        Reassign
+                        }@else{
+                        Assign
+                        }
+                    </button>
+                    }
+                </td>
+                <td class="border text-center  p-1 py-2">
+                    <!-- Action -->
+                    <button class="btn btn-secondary btn-sm mx-2 mb-2 mt-2" (click)="rideInfo(ride)"
+                        data-bs-toggle="modal" data-bs-target="#infoModal">
+                        <b>i</b>
+                    </button>
+
+                    @if(ride.rideStatus !== 0){
+
+                    @if(ride.rideStatus !== 1 && ride.rideStatus !== 6  && ride.rideStatus !== 9){
+                    <button class="btn  mb-2 mt-1 me-2 "
+                        (click)="ActionBtn(ride.rideStatus , ride._id , ride.driverId?._id)"
+                        [ngStyle]="{ 'background-color': ride.rideStatus === 0 ? 'lightblue' : ride.rideStatus === 1 ? 'yellow' : ride.rideStatus ===  5? 'green' : ride.rideStatus ===  6? 'blue' :ride.rideStatus ===  3? 'purple' : ride.rideStatus ===  4? 'lightgreen'  : ride.rideStatus === 2 ? 'green' : 'sky' ,   'color': ride.rideStatus === 5 ? 'white'  : ride.rideStatus === 2 ? 'white'  : ride.rideStatus === 3 ? 'white' : 'black' }">
+
+                        @switch(ride.rideStatus){
+                        @case(2){
+                        Picked
+                        }
+                        @case(3){
+                        Completed
+                        }
+                        @case(4){
+                        Arrived
+                        }
+                        @case(5){
+                        Start
+                        }
+                        }
+                    </button>
+                    }
+                    }
+
+                    @if(ride.rideStatus === 1 || ride.rideStatus === 0 || ride.rideStatus === 6 || ride.rideStatus === 9){
+                    <button class="btn btn-danger " (click)="cancleTheRide(ride._id , ride.driverId?._id)">
+                        Cancle
+                    </button>
+                    }
+                </td>
+            </tr>
+            <br>
+            }
+            }
+        </table>
+        @if(RidesFetched && RidesFetched.length == 0){
+        <div class="container text-danger  d-flex justify-content-center">
+            <h3>No Rides Found</h3>
+        </div>
+        }
+    </div>
+    <!-- <div class="d-flex justify-content-center align-items-end mt-2">
+
+        <button [disabled]="disablePrevBnt()" class="btn btn-dark text-white me-3 shadow"
+            (click)="previousBtn()">Prev</button>
+        <span class="text-center span me-3 pb-3 h-2 ">{{pageNumber}}</span>
+        <button [disabled]="disableNextBnt()" class="btn" class="btn btn-dark text-white shadow"
+            (click)="nextBtn()">Next</button>
+    </div> -->
+</div>
+
+
+
+
+<div class=" modaldiv modal fade   " id="AssignModal">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content ">
+            <div class="modal-header text-center">
+                <h4 class="modal-title">Active Drivers </h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="container table-responsive">
+                <table class="table">
+                    <tr>
+                        <th>Driver Profile</th>
+                        <th>Driver Name</th>
+                        <th>Driver Email</th>
+                        <th>Driver Phone</th>
+                        <th>Driver service Type</th>
+                        <th>City</th>
+                        <th>Action</th>
+                    </tr>
+                    @for(driver of ActiveDrivers ; track $index){
+                    <tr class="border-bottom">
+                        <td>
+                            <img [src]="'http://localhost:5000/public/driverProfile/' + driver.driverProfile"
+                                onerror="this.src='assets/noImageFound.jpg'"
+                                class="my-1 border profile rounded img-fluid " alt="{{ driver.driverName }} Icon">
+                        </td>
+                        <td>{{driver.driverName}}</td>
+                        <td>{{driver.driverEmail}}</td>
+                        <!-- <td>{{ActiveDrivers[0].countryId.countryCallingCode}} {{driver.driverPhone}}</td> -->
+                        <td>{{selectedRide.countryInfo.countryCallingCode}} {{driver.driverPhone}}</td>
+                        <td>{{selectedRide.typeId.vehicleType}}</td>
+                        <td>{{ActiveDrivers[0].cityId.formatted_address}}</td>
+                        <td>
+                            <button class="btn btn-info" data-bs-dismiss="modal" (click)="AssignDriverToRide(driver)">
+                                <!-- @if(selectedRide  ){
+                                    selectedRide.assignedDriverName  
+                                }@else{ -->
+                                Assign
+                                <!-- } -->
+                            </button>
+                        </td>
+                    </tr>
+                    }
+                </table>
+                @if(ActiveDrivers && ActiveDrivers.length == 0){
+                <div class="container  d-flex justify-content-center">
+                    <h3 class="text-danger">No Available Driver Found</h3>
+                </div>
+                <hr>
+                }
+            </div>
+            <div class="container table-responsive d-flex justify-content-start">
+                @if(selectedRide){
+                <table id="InfoTable" class="ms-3">
+                    <tr>
+                        <th>Request-id</th>
+                        <td>: {{selectedRide._id}}</td>
+                    </tr>
+                    <tr>
+                        <th>User-id: </th>
+                        <td>: {{selectedRide.userId._id}}</td>
+                    </tr>
+                    <!-- <tr>
+                        <img [src]="'http://localhost:5000/public/userProfile/' + selectedRide.userId.userProfile"
+                            onerror="this.src='assets/noImageFound.jpg'" class="my-1 border profile rounded img-fluid "
+                            alt="{{selectedRide.userId.userName }} Icon">
+
+                    </tr> -->
+                    <tr>
+                        <th>User Name </th>
+                        <td>: {{selectedRide.userId.userName}}</td>
+                    </tr>
+                    <tr>
+                        <th>User Phone</th>
+                        <td> : {{selectedRide.countryInfo.countryCallingCode}} {{selectedRide.userId.userPhone}}</td>
+                    </tr>
+                    <tr>
+                        <th>User Email </th>
+                        <td>: {{selectedRide.userId.userEmail}}</td>
+                    </tr>
+                    <tr>
+                        <th>PickUp Location </th>
+                        <td>: {{selectedRide.startLocation}}</td>
+                    </tr>
+                    <tr>
+                        <th>Drop-Off Location </th>
+                        <td>: {{selectedRide.endLocation}}</td>
+                    </tr>
+                    <tr>
+                        <th>Way Points: </th>
+                        @for(point of selectedRide.route ;track $index){
+                        <td class="space">:{{$index +1}}-{{point}}</td>
+                        }
+                        @if(selectedRide.route && selectedRide.route.length == 0){
+                        <td>: No Way Points for this Ride</td>
+                        }
+                    </tr>
+                    <tr>
+                        <th>Service Type </th>
+                        <td>: {{selectedRide.typeId.vehicleType}}</td>
+                    </tr>
+                    <tr>
+                        <th>Total Distance </th>
+                        <td>: {{selectedRide.totalDistance | number:'1.2-2'}} Km</td>
+                    </tr>
+                    <tr>
+                        <th>Estimated Time </th>
+                        <td> : {{selectedRide.totalTime}} m </td>
+                    </tr>
+                    <tr>
+                        <th>Estimated Fare </th>
+                        <td> : {{selectedRide.totalFare |number:'1.2-2'}} {{selectedRide.countryInfo.currency}}</td>
+                    </tr>
+
+                </table>
+                }
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger shadow" data-bs-dismiss="modal">Cancle</button>
+                <button class="btn btn-success shadow" data-bs-dismiss="modal"
+                    (click)="assignAnyAvailableDriver(selectedRide._id)">Assign Any Available Driver</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- info modal -->
+
+
+<div class=" modaldiv modal fade  " id="infoModal">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content ">
+            <div class="modal-header text-center">
+                <h4 class="modal-title">Ride Information</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            @if(rideInfoOfSelectedRide){
+            <div class="text-center my-1">
+
+                <img [src]="'http://localhost:5000/public/userProfile/' + rideInfoOfSelectedRide.userId.userProfile"
+                    onerror="this.src='assets/noImageFound.jpg'" class="my-1 border profile2 rounded img-fluid "
+                    alt="{{rideInfoOfSelectedRide.userId.userName }} Icon">
+            </div>
+            <div class="container table-responsive d-flex justify-content-start">
+                <!-- @if(selectedRide){ -->
+                <table id="InfoTable" class="ms-3">
+
+                    <tr class="text-center">
+
+                    </tr>
+                    <tr>
+                        <th>User Name </th>
+                        <td>: {{rideInfoOfSelectedRide.userId.userName}}</td>
+                    </tr>
+                    <tr>
+                        <th>User Phone</th>
+                        <td> : {{rideInfoOfSelectedRide.countryInfo.countryCallingCode}}
+                            {{rideInfoOfSelectedRide.userId.userPhone}}</td>
+                    </tr>
+                    <tr>
+                        <th>User Email </th>
+                        <td>: {{rideInfoOfSelectedRide.userId.userEmail}}</td>
+                    </tr>
+                    <tr>
+                        <th>Book Date</th>
+                        <td>: {{rideInfoOfSelectedRide.date}}</td>
+                    </tr>
+                    <tr>
+                        <th>Book Time</th>
+                        <td>: {{rideInfoOfSelectedRide.timeInString}}</td>
+                    </tr>
+                    <tr>
+                        <th>PickUp Location </th>
+                        <td>: {{rideInfoOfSelectedRide.startLocation}}</td>
+                    </tr>
+                    <tr>
+                        <th>Drop-Off Location </th>
+                        <td>: {{rideInfoOfSelectedRide.endLocation}}</td>
+                    </tr>
+                    <tr>
+                        <th>Way Points: </th>
+                        @for(point of rideInfoOfSelectedRide.route ;track $index){
+                        <td class="space">:{{$index +1}}-{{point}}</td>
+                        }
+                        @if(rideInfoOfSelectedRide.route && rideInfoOfSelectedRide.route.length == 0){
+                        <td>: No Way Points for this Ride</td>
+                        }
+                    </tr>
+                    <tr>
+                        <th>Service Type </th>
+                        <td>: {{rideInfoOfSelectedRide.typeId.vehicleType}}</td>
+                    </tr>
+                    <tr>
+                        <th>Total Distance </th>
+                        <td>: {{rideInfoOfSelectedRide.totalDistance | number:'1.2-2'}} Km</td>
+                    </tr>
+                    <tr>
+                        <th>Estimated Time </th>
+                        <td> : {{rideInfoOfSelectedRide.totalTime}} m </td>
+                    </tr>
+                    <tr>
+                        <th>Estimated Fare </th>
+                        <td> : {{rideInfoOfSelectedRide.totalFare |number:'1.2-2'}}
+                            {{rideInfoOfSelectedRide.countryInfo.currency}}</td>
+                    </tr>
+
+                </table>
+                <!-- } -->
+            </div>
+            }
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary shadow" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

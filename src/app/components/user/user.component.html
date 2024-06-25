@@ -1,0 +1,240 @@
+<div class="container mt-3">
+    <form [formGroup]="userForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="userName" class="form-label"><b>User Name <sup class="text-danger ">*</sup>:</b></label>
+            <input type="text" class="form-control" id="userName" formControlName="userName">
+            @if(userName !== null && (userName.touched || userName.dirty)){
+            @if(userName.errors?.['required']){
+            <span class="text-danger">username is required.</span>
+            }
+            @if(userName.errors?.['minlength']){
+            <span class="text-danger">username should be <b>6</b> character long.</span>
+            }
+            @if(userName.errors?.['maxlength']){
+            <span class="text-danger">character execeded.</span>
+            }
+            }
+        </div>
+        <div class="mb-3">
+            <label for="userEmail" class="form-label"><b>User Email<sup class="text-danger ">*</sup>:</b></label>
+            <input type="email" class="form-control" id="userEmail" formControlName="userEmail">
+            @if(userEmail !== null && (userEmail.touched || userEmail.dirty)){
+            @if(userEmail.errors?.['required']){
+            <span class="text-danger">userEmail is required.</span>
+            }
+            @if(userEmail.errors?.['minlength']){
+            <span class="text-danger">userEmail should be <b>4</b> character long.</span>
+            }
+            @if(userEmail.errors?.['maxlength']){
+            <span class="text-danger">character execeded.</span>
+            }
+            }
+        </div>
+        <div class="mb-3">
+            <label for="userProfile" class="form-label"><b>User Profile<sup class="text-danger ">*</sup>:</b></label>
+            <input type="file" class="form-control" accept="image/*" id="userProfile" name="userProfile"
+                (change)="onFileSelected($event)" formControlName="userProfile">
+            @if(userProfile !== null && (userProfile.dirty ||userProfile.touched)){
+            @if(userProfile.errors?.['required']){
+            <span class="text-danger">file is required.</span> <br>
+            }
+            @if(userProfile.errors?.['invalidFormat']){
+            <span class="text-danger">Invalid formate.</span> <br>
+            }
+            }
+        </div>
+        <div class="mb-3">
+            <label for="userPhone" class="form-label"><b>User Phone with Country Code<sup
+                        class="text-danger ">*</sup>:</b></label>
+            <div class="input-group">
+                <select class="select-small border " name="countryCallingCode" formControlName="countryCallingCode">
+                    @for(code of CountryCodes ;track code){
+                    <option class="bg-dark text-white" value="{{code.countryId}}">{{code.countryCallingCode}} ({{code.country}})</option>
+                    }
+                </select>
+                @if(countryCallingCode !== null && (countryCallingCode.touched || countryCallingCode.dirty)){
+                @if(countryCallingCode.errors?.['required']){
+                <br><span class="text-danger">Calling code is required.</span>
+                }
+                }
+                <input type="text" class="form-control ms-3" id="userPhone" formControlName="userPhone">
+            </div>
+            @if(userPhone !== null && (userPhone.touched || userPhone.dirty)){
+            @if(userPhone.errors?.['required']){
+            <span class="text-danger">Phone no. is required.</span>
+            }
+            @if(userPhone.errors?.['minlength']){
+            <br><span class="text-danger">Phone no. should be <b>10</b> character long.</span>
+            }
+            @if(userPhone.errors?.['maxlength']){
+            <br><span class="text-danger">character execeded.</span>
+            }
+            }
+
+        </div>
+        @if(!update){
+        <button type="submit" class="btn form-control btn-success">Submit</button>
+        }
+    </form>
+    @if(update){
+    <div class="d-flex">
+
+        <button (click)="updateUser()" [disabled]="!update" class="btn my-1 me-5 form-control btn-info">update</button>
+        <button (click)="clearAll()" class="btn my-1 form-control btn-warning ">Clear</button>
+    </div>
+
+    }
+
+
+    <button (click)="searchUsers(inputValue.value)" class="btn btn-dark text-white btn-sm my-2">Search</button>
+
+
+    <div class="input-group mb-2">
+        <input type="text" class="form-control" #inputValue (keyup.enter)="searchUsers(inputValue.value)">
+        <div class="input-group-append">
+            <div class="input-group-text bg-dark text-white">Hit Enter</div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4 ">
+    <div class="container my-2">
+        <b class="h4">Sort By:</b>
+        <select class="select-sort form-select" id="countryCode" #selectedValue
+            (change)="SelectedSortValue(selectedValue.value)">
+            <option class="my-2 border-bottom" value="none"><b>none</b></option>
+            <option class="my-2 border-bottom" value="userName"><b>User Name</b></option>
+            <option class="my-2 border-bottom" value="userPhone"><b>User Phone No.</b></option>
+            <option class="my-2 border-bottom" value="userEmail"><b>User Email</b></option>
+        </select>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+
+            <tr class="text-center border bg-dark text-white">
+                <th>User Name</th>
+                <th>User Profile</th>
+                <th>User Phone</th>
+                <th>User Email</th>
+                <th>Edit</th>
+                <th>Cards Details</th>
+                <th>Delete</th>
+            </tr>
+            @if(userFatchedlength > -1){
+            @for(user of userFatched;track user ){
+            <tr class="text-center border shadow-sm mt-3">
+                <td>{{user.userName}}</td>
+                <td> <img [src]="'http://localhost:5000/public/userProfile/' + user.userProfile"
+                        onerror="this.src='assets/noImageFound.jpg'" class="my-1 border profile rounded img-fluid "
+                        alt="{{ user.userName }} Icon">
+                </td>
+                <td>{{user.countryCallingCode.countryCallingCode}} {{user.userPhone}}</td>
+                <td>{{user.userEmail}}</td>
+                <td>
+                    <button class="btn btn-warning btn-sm px-3 my-2 me-1 shadow"
+                        (click)="editClicked(user)">Edit</button>
+                </td>
+                <td>
+                    <!-- <button class="btn btn-info btn-sm px-3 my-2 me-1" (click)="addCard(user)" >Add Cards</button> -->
+                    <button class="btn btn-info btn-sm px-3 my-2 me-1 shadow" data-bs-toggle="modal"
+                        data-bs-target="#mymodal" (click)="getCards(user)">My Cards</button>
+
+                </td>
+                <td>
+                    <button class="btn btn-danger btn-sm px-3 my-2 me-1 shadow"
+                        (click)="deleteClicked(user._id)">Delete</button>
+                </td>
+            </tr>
+            <br>
+            }}
+        </table>
+    </div>
+
+    <div class="d-flex justify-content-end align-items-end me-3">
+
+        <button [disabled]="disablePrevBnt()" class="btn btn-dark text-white me-3 shadow"
+            (click)="previousBtn()">Prev</button>
+        <span class="text-center span me-3 pb-3 h-2 ">{{pageNumber}}</span>
+        <button [disabled]="disableNextBnt()" class="btn" class="btn btn-dark text-white shadow"
+            (click)="nextBtn()">Next</button>
+    </div>
+</div>
+
+
+<!-- Card Modal -->
+<div class=" modaldiv modal fade  " id="mymodal">
+    <div class="modal-dialog">
+        <div class="modal-content ">
+            <div class="modal-header text-center">
+                <h4 class="modal-title">Add Cards</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="container text-center mb-1">
+                <button class="btn btn-info btn-sm px-3 my-2 me-1 shadow" (click)="addCard()">Add New Card</button>
+            </div>
+            <div class="container">
+                @if(customerCards){
+                <table class="table">
+                    @defer{
+                    @for(card of customerCards;track card.cardId ){
+                    <tr class="border my-4 shadow">
+                        <th class="ps-3">
+                            <input type="radio" id="default-card-{{card.cardId}}" name="default-card"
+                                value="{{card.cardId}}" [checked]="card.cardId === defaultCardId"
+                                [checked]="card.cardId === defaultCardId" (change)="onCardSelected(card.cardId)">
+                        </th>
+                        <th class="text-start" >
+                            <span class="text-primary border rounded-top border-bottom-0 border-end-0 border-start-0">
+                                {{card.brand}}</span>
+                            @if(card.cardId == defaultCardId){
+                            <span class="badge text-success default">Default</span>
+                            }<br>
+                            XXXX XXXX XXXX<label for="default-card-{{card.cardId}}">{{card.last4}}</label>
+
+                        </th>
+                        <td class="text-danger "><b>Exp:</b>
+                        {{card.exp_month  +"/"+card.exp_year}}
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-danger delete shadow"
+                                (click)="deleteCard(card)">Delete</button>
+                        </td>
+                    </tr>
+                    <br>
+                    }
+                    }@placeholder(minimum 30){
+                    <div class="row">loading...</div>
+                    }@loading{
+                    <div class="placeholder">loading...</div>
+
+                    }@error{
+                    <div class="error">Some Error Occured</div>
+                    }
+                </table>
+                }@else{
+                <div class="container text-danger text-center">No Cards Available</div>
+                }
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary shadow" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="modal fade  " id="mymodal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Add Vehicle Type</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="container">
+                <button class="btn btn-info btn-sm px-3 my-2 me-1" (click)="addCard(user)">Add Cards</button>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div> -->

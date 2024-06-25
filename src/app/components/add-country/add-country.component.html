@@ -1,0 +1,155 @@
+<div>
+    <div class="modal fade  " id="mymodal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- modal header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Country</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- modal body -->
+                <div class="container">
+                    <form [formGroup]="Country" (submit)="addCountry()" id="countryForm" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="country" class="form-label">Country Name:</label>
+                            <input type="text" id="country" name="country" class="form-control"
+                                placeholder="enter your country" formControlName="country" #CountryTag>
+                            <div class="d-flex flex-row">
+                                <span class=" mt-2  mx-2 btn btn-info form-control"
+                                    (click)="serchCountry()">Search</span>
+
+                                <span class=" mt-2 mx-2 btn btn-warning form-control"
+                                    (click)="clearSerchBar()">Clear</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="currency" class="form-label">currency:</label>
+                            <input type="readonly" accept="image/*" id="currency" name="currency" class="form-control"
+                                placeholder="currency" formControlName="currency" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="countryCode" class="form-label">country Code:</label>
+                            <input type="readonly" accept="image/*" id="countryCode" name="countryCode" class="form-control"
+                                placeholder="country Code" formControlName="countryCode" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="countryCallingCode" class="form-label">country Calling Code:</label>
+                            <input type="readonly" accept="image/*" id="countryCallingCode" name="countryCallingCode"
+                                class="form-control" placeholder="country Calling Code"
+                                formControlName="countryCallingCode" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <button [disabled]="Country.invalid" type="submit" class="btn btn-info form-control"
+                                data-bs-dismiss="modal">Add</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- modal footer -->
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="my-3">
+        <label for="countryCallingCode" class="form-label">Search by Name:</label>
+        <div class="input-group mb-2">
+            <input class="form-control " #serchInput (keyup.enter)="serch(serchInput.value)">
+            <div class="input-group-append ">
+                <div class="input-group-text bg-dark text-white ">Hit Enter</div>
+            </div>
+        </div>
+        <button class="btn btn-info mt-2" (click)="serch(serchInput.value)">Search</button>
+    </div>
+    <div class="text-center my-3">
+        <button class="btn btn-info form-control  " data-bs-toggle="modal" data-bs-target="#mymodal">Add Country
+            type</button>
+    </div>
+    <hr>
+
+    <div class="">
+        @if(serched){
+        <h2>Serched Countries</h2>
+        <div class=" listBox container ">
+            <table class=" table border">
+                <tr class="border">
+                    <th class="text-center">Country Name</th>
+                    <th class="text-center">Currency</th>
+                    <th class="text-center">Country Code</th>
+                    <th class="text-center">Country Calling Code </th>
+                    <th class="text-center">Country Flag</th>
+                    <th class="text-center">Country TimeZone</th>
+                </tr>
+                @for(country of serchedCountries ;track country){
+
+                <tr class="mb-5 border-bottom ">
+                    <td class="text-center">
+                        <b> <span>{{ country.country }}</span></b>
+                    </td>
+                    <td class="text-center">
+                        <span>{{ country.currency }}</span>
+                    </td>
+                    <td class="text-center">
+                        <span>{{ country.countryCode }}</span>
+                    </td>
+                    <td class="text-center">
+                        <span>{{ country.countryCallingCode }}</span>
+                    </td>
+                    <td class="ns m-1 text-center">
+                        <img [src]="country.flagSymbol" class=" border my-1 icons rounded img-fluid " alt='not found'
+                            onerror="this.src='assets/noImageFound.jpg'" height="40px" width="100px"
+                            style="border-radius: 5px;">
+                    </td>
+                    <td class="text-center">
+                        <span>{{ country.timeZone }}</span>
+                    </td>
+                </tr>
+
+                }
+            </table>
+        </div>
+        }@else {
+        <h2 class="m-3 border-bottom">List of Countries</h2>
+
+
+        <div class=" listBox container table-responsive ">
+            <table class="table border">
+                <tr class="border">
+                    <th class="text-center">Country Name</th>
+                    <th class="text-center">Currency</th>
+                    <th class="text-center">Country Code</th>
+                    <th class="text-center">Country Calling Code </th>
+                    <th class="text-center">Country Flag</th>
+                    <th class="text-center">Country TimeZone</th>
+                </tr>
+                @for(country of Countries ;track country){
+
+                <tr class="mb-5 border-bottom ">
+                    <td class="text-center">
+                        <b> <span>{{ country.country }}</span></b>
+                    </td>
+                    <td class="text-center">
+                        <span>{{ country.currency }}</span>
+                    </td>
+                    <td class="text-center">
+                        <span>{{ country.countryCode }}</span>
+                    </td>
+                    <td class="text-center">
+                        <span>{{ country.countryCallingCode }}</span>
+                    </td>
+                    <td class="ns m-1 text-center">
+                        <img [src]="country.flagSymbol" class=" border my-1 icons rounded img-fluid " alt='not found'
+                            onerror="this.src='assets/noImageFound.jpg'" height="40px" width="100px"
+                            style="border-radius: 5px;">
+                    </td>
+                    <td class="text-center">
+                        <span>{{ country.timeZone }}</span>
+                    </td>
+                </tr>
+
+                }
+            </table>
+        </div> }
+
+    </div>

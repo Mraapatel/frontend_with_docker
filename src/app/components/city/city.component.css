@@ -1,0 +1,27 @@
+.left {
+    margin-top: 2vh;
+    height: 70vh;
+    /* width: 50vw; */
+    float: left;
+}
+
+.right {
+    margin-top: 2vh;
+    height: 70vh;
+    width: 30vw;
+    float: right;
+}
+
+ul {
+    list-style: none;
+}
+
+.shadow {
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15);
+}
+
+@media screen and (max-width: 1400px) {
+    .right {
+        width: 100vw;
+    }
+}

@@ -1,0 +1,122 @@
+.width {
+    max-width: 8rem;
+}
+
+.time {
+    max-width: 5rem;
+}
+
+.mapBox {
+    height: 80vh;
+    width: 100vh;
+    border-radius: 15px;
+}
+
+.first {
+    height: 80vh;
+    width: 80vh;
+    border-radius: 15px;
+    overflow: auto;
+    scrollbar-width: none;
+}
+
+.hover:hover {
+    cursor: pointer;
+}
+
+.profile2 {
+    height: 80px;
+    width: 80px;
+    border-radius: 5px
+}
+
+.font {
+    font-size: 2rem;
+    margin-right: 1rem;
+}
+
+.font2 {
+    border: 2px solid rgb(110, 243, 210);
+    margin-top: 1rem;
+    width: 20px;
+    height: 20px;
+}
+
+.bgcolor {
+    background-color: rgb(68, 69, 69);
+}
+
+
+.download {
+    width: 8rem;
+}
+
+.example-form-field {
+    height: 4.5rem;
+    /* width: 50%; */
+    padding-bottom: 0;
+    /* border-bottom-radius: 4px; */
+}
+
+.firstBox {
+    height: 2rem;
+}
+
+
+.date-picker-toggle {
+
+    width: 50%;
+}
+
+hr {
+
+    background-color: white;
+}
+
+::placeholder {
+    color: white;
+    opacity: 1;
+    /* Firefox */
+}
+
+/* mat-form-field {
+    background-color: red ;
+} */
+
+
+/* mat-date-range-input {
+    background-color: red !important;
+}
+
+mat-datepicker-toggle {
+    background-color: red !important;
+}
+
+mat-date-range-picker {
+    background-color: red !important;
+} */
+
+.mat-mdc-text-field-wrapper {
+    display: none !important;
+}
+
+.mat-mdc-form-field-subscript-wrapper{
+    display: none !important;
+}
+
+
+/* .mat-mdc-form-field-subscript-wrapper,
+.mat-mdc-form-field-bottom-align {
+    display: none !important;
+}
+
+.mat-mdc-form-field-hint-wrapper,
+.ng-trigger,
+.ng-trigger-transitionMessages {
+    display: none !important;
+
+}
+
+.mat-mdc-form-field-hint-spacer {
+    display: none !important;
+} */

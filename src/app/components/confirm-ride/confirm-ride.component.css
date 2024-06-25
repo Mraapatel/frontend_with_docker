@@ -1,0 +1,36 @@
+.profile {
+    height: 60px;
+    width: 60px;
+    border-radius: 5px
+}
+
+.profile2{
+    height: 80px;
+    width: 80px;
+    border-radius: 5px
+}
+
+
+#InfoTable td {
+    padding-left: 3rem
+}
+
+#InfoTable tr {
+    border-bottom: 1px solid silver;
+}
+
+.width{
+    max-width: 10rem;
+}
+
+/* .orange{
+    background-color: ;
+} */
+.id{
+    max-width: 13rem;
+    /* overflow: auto;
+    border-radius: 20px;
+    border: 3px solid orange; */
+
+}
+

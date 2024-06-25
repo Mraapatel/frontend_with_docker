@@ -1,0 +1,47 @@
+<form [formGroup]="countryForm">
+
+    <div>
+        <h5 class="mt-2">Select the Country:</h5>
+        <select class="mt-2  form-select" name="country" id="country" #seletedCountry
+            (change)="seletedC(seletedCountry.value)" formControlName="country">
+            @for(country of countryList;track country.countryName){
+            <option value="{{ country.countryCode2 }}+{{country._id}}">{{ country.country }}</option>
+            <!-- <option value="{{ country.countryCode2 }}+{{country._id}}+{{country.country}}">{{ country.country }}</option> -->
+            <!-- <option value="{{ contry.countryCode2 }}">{{ contry.country }}</option> -->
+            }
+        </select>
+    </div>
+
+    <div class="mt-3">
+        <label for="city" class="form-label">city:</label>
+        <input type="text" id="city" name="city" class="form-control" placeholder="enter your city" #inputTag
+            formControlName="city">
+    </div>
+</form>
+<div class="row">
+    <div id="map"
+        class="  mx-2 shadow col col-xxl-7 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12  container left rounded ">
+    </div>
+
+    <div
+        class=" overflow-auto col col-xxl-5 col-xl-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12  container right  rounded shadow ">
+        <ul>
+            <h5 class="text-center mt-1"> Previously Stored Zones</h5>
+            @for(city of cityList ;track city){
+            <button class="btn form-control btn-info mt-2 shadow" (click)="cityChoosed(city)">
+                {{city.formatted_address}}
+            </button>
+            }
+        </ul>
+    </div>
+
+</div>
+
+<button class="btn btn-warning mt-2 me-3" (click)="ClearAll()">Clear</button>
+@if(storeArea){
+<button [disabled]="!storeArea" class="btn btn-info mt-2" (click)="storeDrawnArea()">Store Area</button>
+}@else{
+@if(!editablezone){
+<button [disabled]="editablezone" class="btn btn-warning  mt-2 ms-3" (click)="saveChangedArea()">Save changes</button>
+}
+}

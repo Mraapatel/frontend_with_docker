@@ -1,0 +1,15 @@
+.profile {
+    height: 60px;
+    width: 60px;
+    border-radius: 5px
+}
+
+.profile2 {
+    height: 80px;
+    width: 80px;
+    border-radius: 5px
+}
+
+.width{
+    max-width: 8rem;
+}

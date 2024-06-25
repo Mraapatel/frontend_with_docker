@@ -1,0 +1,352 @@
+<div class="container mt-3">
+    <form [formGroup]="driverForm" (ngSubmit)="onSubmit()" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="driverName" class="form-label"><b>Driver Name<sup class="text-danger ">*</sup>:</b></label>
+            <input type="text" class="form-control" id="driverName" formControlName="driverName">
+            @if(driverName !== null && (driverName.touched || driverName.dirty)){
+            @if(driverName.errors?.['required']){
+            <span class="text-danger">Driver Name is required.</span>
+            }
+            @if(driverName.errors?.['minlength']){
+            <span class="text-danger">Driver Name should be <b>6</b> character long.</span>
+            }
+            @if(driverName.errors?.['maxlength']){
+            <span class="text-danger">character execeded.</span>
+            }
+            }
+        </div>
+        <div class="mb-3">
+            <label for="driverEmail" class="form-label"><b>Driver Email<sup class="text-danger ">*</sup>:</b></label>
+            <input type="email" class="form-control" id="driverEmail" formControlName="driverEmail">
+            @if(driverEmail !== null && (driverEmail.touched || driverEmail.dirty)){
+            @if(driverEmail.errors?.['required']){
+            <span class="text-danger">Driver Email is required.</span>
+            }
+            @if(driverEmail.errors?.['minlength']){
+            <span class="text-danger">Driver Email should be <b>4</b> character long.</span>
+            }
+            @if(driverEmail.errors?.['maxlength']){
+            <span class="text-danger">character execeded.</span>
+            }
+            }
+        </div>
+        <div class="mb-3">
+            <label for="driverProfile" class="form-label"><b>Driver Profile<sup
+                        class="text-danger ">*</sup>:</b></label>
+            <input type="file" class="form-control" accept="image/*" id="driverProfile" name="driverProfile"
+                (change)="onFileSelected($event)" formControlName="driverProfile">
+            @if(driverProfile !== null && (driverProfile.touched || driverProfile.dirty)){
+            @if(driverProfile.errors?.['required']){
+            <span class="text-danger">file is required.</span> <br>
+            }
+            }
+        </div>
+        <div class="mb-3">
+            <label for="driverPhone" class="form-label"><b>Driver Phone with Country Code<sup
+                        class="text-danger ">*</sup>:</b></label>
+            <div class="input-group">
+                <select class="select-small border " id="countryCode" formControlName="countryCallingCode"
+                    (change)="getCitiesOrNot ? getTheCities() : null">
+                    @for(country of CountryCodes ;track country){
+                    <option class="bg-dark text-white" value="{{country._id}}">
+                        {{country.countryCallingCode}} ({{country.country}})</option>
+                    }
+                </select>
+                @if(countryCallingCode !== null && (countryCallingCode.touched || countryCallingCode.dirty)){
+                @if(countryCallingCode.errors?.['required']){
+                <br><span class="text-danger">Calling code is required.</span>
+                }
+                }
+                <input type="text" class="form-control ms-3" id="driverPhone" formControlName="driverPhone">
+
+            </div>
+            @if(driverPhone !== null && (driverPhone.touched || driverPhone.dirty)){
+            @if(driverPhone.errors?.['required']){
+            <span class="text-danger">Phone no. is required.</span>
+            }
+            @if(driverPhone.errors?.['minlength']){
+            <br><span class="text-danger">Phone no. should be <b>10</b> character long.</span>
+            }
+            @if(driverPhone.errors?.['maxlength']){
+            <br><span class="text-danger">character execeded.</span>
+            }
+            }
+            <div class="mt-3">
+                <label for="city" class="form-label"><b>Driver city<sup class="text-danger ">*</sup>:</b> note:(Please
+                    select the country Code first)</label>
+                <select class="form-select" name="driverCity" id="city" (change)="selectedCity()"
+                    formControlName="driverCity">
+                    @for(city of cityList;track city){
+                    <option [value]="city._id" class="bg-dark text-white">{{city.formatted_address}}</option>
+                    }
+                </select>
+                @if(driverCity !== null && (driverCity.touched || driverCity.dirty)){
+                @if(driverCity.errors?.['required']){
+                <span class="text-danger">Driver city is required.</span>
+                }
+                }
+            </div>
+        </div>
+        @if(!update){
+        <button type="submit" class="btn form-control btn-success">Submit</button>
+        }
+    </form>
+    @if(update){
+    <div class="d-flex">
+        <button (click)="updateDriver()" class="btn  my-1 form-control btn-info me-5">update</button>
+        <button (click)="clearAll()" class="btn my-1 form-control btn-warning ">Clear</button>
+    </div>
+    }
+
+
+
+    <button (click)="searchDriver(inputValue.value)" class="btn btn-dark text-white btn-sm my-2">Search</button>
+
+
+    <div class="input-group mb-2">
+        <input type="text" class="form-control" #inputValue (keyup.enter)="searchDriver(inputValue.value)">
+        <div class="input-group-append ">
+            <div class="input-group-text bg-dark text-white ">Hit Enter</div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4 ">
+    <div class="container my-2">
+        <b class="h4">Sort By:</b>
+        <select class="select-sort form-select" id="countryCode" #selectedValue
+            (change)="SelectedSortValue(selectedValue.value)">
+            <option class="my-2 border-bottom" value="none"><b>none</b></option>
+            <option class="my-2 border-bottom" value="driverName"><b>Driver Name</b></option>
+            <option class="my-2 border-bottom" value="driverPhone"><b>Driver Phone No.</b></option>
+            <option class="my-2 border-bottom" value="driverEmail"><b>Driver Email</b></option>
+        </select>
+    </div>
+    <div class="table-responsive">
+        <table class="table ">
+
+            <tr class="text-center border bg-dark text-white">
+                <th>Driver Name</th>
+                <th>Driver Profile</th>
+                <th>Driver Phone</th>
+                <th>Driver Email</th>
+                <th>City</th>
+                <th>Service Details</th>
+                <th>Approve/Decline</th>
+                <th>Bank Details</th>
+                <th>Edit</th>
+                <th>Delete</th>
+            </tr>
+            @if(driverFatchedlength > -1){
+            @for(driver of driverFatched;track driver ){
+            <tr class="text-center border shadow-sm mt-3">
+                <td>{{driver.driverName}}</td>
+                <td> <img [src]="'http://localhost:5000/public/driverProfile/' + driver.driverProfile"
+                        onerror="this.src='assets/noImageFound.jpg'" class="my-1 border profile rounded img-fluid "
+                        alt="{{ driver.driverName }} Icon">
+                </td>
+                <td>{{driver.countryId.countryCallingCode}} {{driver.driverPhone}}</td>
+                <td class="overflow-auto">{{driver.driverEmail}}</td>
+                <td class="overflow-auto">{{driver.cityId?.formatted_address}}</td>
+                <td>
+                    <!-- <button class="btn btn-info btn-sm px-3 my-2 me-1" (click)="addCard(driver)" >Add Cards</button> -->
+                    <button class="btn btn-info btn-sm px-3 my-2 me-1 shadow" data-bs-toggle="modal"
+                        data-bs-target="#mymodal" (click)="getServices(driver)">
+                        @if(driver.serviceType){
+                        {{driver.serviceType.vehicleType}}
+                        }@else{
+                        Add Service
+                        }
+                    </button>
+
+                </td>
+                <td>
+                    <button class="btn  btn-sm px-3 my-2 me-1 shadow" (click)="approveOrDecline(driver)"
+                        [class.btn-success]="driver.approveStatus" [class.btn-danger]="!driver.approveStatus">{{
+                        driver.approveStatus ? 'Approved' : 'Declined' }}</button>
+                </td>
+                <td>
+                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#bankDetailsmodal"
+                        (click)="getDriverId(driver)">Add Bank
+                        Details</button>
+                </td>
+                <td>
+                    <button class="btn btn-warning btn-sm px-3 my-2 me-1 shadow"
+                        (click)="editClicked(driver)">Edit</button>
+                </td>
+                <td>
+                    <button class="btn btn-danger btn-sm px-3 my-2 me-1 shadow"
+                        (click)="deleteClicked(driver._id)">Delete</button>
+                </td>
+            </tr>
+            <br>
+            }}
+        </table>
+    </div>
+    <div class="d-flex justify-content-end align-items-end me-3">
+
+        <button [disabled]="disablePrevBnt()" class="btn btn-dark text-white me-3 shadow"
+            (click)="previousBtn()">Prev</button>
+        <span class="text-center span me-3 ">{{pageNumber}}</span>
+        <button [disabled]="disableNextBnt()" class="btn" class="btn btn-dark text-white shadow"
+            (click)="nextBtn()">Next</button>
+    </div>
+</div>
+
+
+<!-- Card Modal -->
+<div class=" modaldiv modal fade  " id="mymodal">
+    <div class="modal-dialog">
+        <div class="modal-content ">
+            <div class="modal-header text-center bg-dark text-white">
+                <h4 class="modal-title">Assign Service</h4><br>
+                <button type="button" class="btn-close bg-white" data-bs-dismiss="modal"></button>
+            </div>
+            <!-- <div class="bg-dark text-white ps-3" style="margin-top: -3px;">Please select the selected service to remove it</div> -->
+            <h6 class="bg-dark text-white ps-3 " style="margin-top: -3px; margin-bottom: 10px;">
+                <span class="badge bg-primary mb-1">note:</span> Please select the <b class="text-warning">NONE</b> to
+                remove the service
+            </h6>
+            <div class="container vehicleTypeTable">
+                <table class="table">
+
+                    @defer{
+                    @for(type of vehicleTypeList;track type ){
+                    <tr class="border my-4 shadow">
+                        <th class="ps-3  " style="width: 20px;">
+                            <input type="radio" id="default-card" name="default-card"
+                                (change)="onServiceSelected(type._id)"
+                                [checked]="type._id == selectedDriver.serviceType?._id">
+                        </th>
+                        <th class="text-start ">
+                            <label for="default-card">{{type.vehicleType}}</label>
+                            @if(type._id === selectedDriver.serviceType?._id){
+                            <span class="badge text-success default">Selected</span>
+                            }
+
+                        </th>
+                    </tr>
+                    <br>
+                    }
+                    }@placeholder(minimum 30){
+                    <div class="row">loading...</div>
+                    }@loading{
+                    <div class="placeholder">loading...</div>
+
+                    }@error{
+                    <div class="error">Some Error Occured</div>
+                    }
+                    <tr class="border my-4 shadow">
+                        <th class="ps-3  " style="width: 20px;">
+                            <input type="radio" id="default-card" name="default-card"
+                                (change)="onServiceNullSelected(null)" [checked]="!servicePresent">
+                        </th>
+                        <th class="text-start ">
+                            <label for="default-card">NONE</label>
+                            @if(!servicePresent){
+                            <span class="badge text-danger default">None selected</span>
+                            }
+
+                        </th>
+                    </tr>
+
+                </table>
+
+            </div>
+            <div class="modal-footer bg-dark">
+                <button class="btn btn-secondary shadow bg-white text-dark" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- bank details modal -->
+
+<div class="modal fade  " id="bankDetailsmodal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- modal header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Add Bank Details</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <!-- modal body -->
+            <div class="container">
+                @if(selectedDriver && selectedDriver.bankDetailsAdded){
+                <div>
+                    <h4 class=" mt-1 text-center text-success">Bank Account is Added Already</h4>
+                </div>
+                }@else{
+
+                <form [formGroup]="bankDetailsForm" (submit)="storeAccountDetails()" id="loginForm"
+                    enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label for="AccountHolderName" class="form-label">Account Holder Name:</label>
+                        <input type="text" id="AccountHolderName" name="AccountHolderName" class="form-control"
+                            placeholder="enter your AccountHolderName" formControlName="AccountHolderName">
+                        @if(bankDetailsForm.get('AccountHolderName')?.errors !== null &&
+                        (bankDetailsForm.get('AccountHolderName')?.touched ||
+                        bankDetailsForm.get('AccountHolderName')?.dirty)){
+                        @if(bankDetailsForm.get('AccountHolderName')?.errors?.['required']){
+                        <span class="text-danger">Account Holder Name is required</span>
+                        }
+                        @if(bankDetailsForm.get('AccountHolderName')?.errors?.['minlength']){
+                        <span class="text-danger">Account Holder Name should be <b>4</b> character long</span>
+                        }
+                        @if(bankDetailsForm.get('AccountHolderName')?.errors?.['maxlength']){
+                        <span class="text-danger">character execeded</span>
+                        }
+                        }
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="AccountNumber" class="form-label">AccountNumber:</label>
+                        <input type="text" id="AccountNumber" name="AccountNumber" class="form-control"
+                            placeholder="enter AccountNumber" formControlName="AccountNumber">
+                        @if(bankDetailsForm.get('AccountNumber')?.errors !== null &&
+                        (bankDetailsForm.get('AccountNumber')?.touched ||
+                        bankDetailsForm.get('AccountNumber')?.dirty)){
+                        @if(bankDetailsForm.get('AccountNumber')?.errors?.['required']){
+                        <span class="text-danger">AccountNumber is required</span>
+                        }
+                        @if(bankDetailsForm.get('AccountNumber')?.errors?.['minlength']){
+                        <span class="text-danger">AccountNumber should be <b>8</b> character long</span>
+                        }
+                        @if(bankDetailsForm.get('AccountNumber')?.errors?.['maxlength']){
+                        <span class="text-danger">character execeded</span>
+                        }
+                        }
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="RoutingNumber" class="form-label">RoutingNumber:</label>
+                        <input type="text" id="RoutingNumber" name="RoutingNumber" class="form-control"
+                            placeholder="enter RoutingNumber" formControlName="RoutingNumber">
+                        @if(bankDetailsForm.get('RoutingNumber')?.errors !== null &&
+                        (bankDetailsForm.get('RoutingNumber')?.touched ||
+                        bankDetailsForm.get('RoutingNumber')?.dirty)){
+                        @if(bankDetailsForm.get('RoutingNumber')?.errors?.['required']){
+                        <span class="text-danger">RoutingNumber is required</span>
+                        }
+                        @if(bankDetailsForm.get('RoutingNumber')?.errors?.['minlength']){
+                        <span class="text-danger">RoutingNumber should be <b>4</b> character long</span>
+                        }
+                        @if(bankDetailsForm.get('RoutingNumber')?.errors?.['maxlength']){
+                        <span class="text-danger">character execeded</span>
+                        }
+                        }
+                    </div>
+                    <div class="mb-3">
+                        <button class="btn btn-info form-control" type="submit" data-bs-dismiss="modal">Submit</button>
+                    </div>
+                </form>
+                }
+            </div>
+            <!-- modal footer -->
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

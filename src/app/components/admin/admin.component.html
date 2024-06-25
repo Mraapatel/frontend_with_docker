@@ -1,0 +1,66 @@
+<div class="container mainContainer">
+    <div class="modal fade  " id="mymodal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- modal header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">login</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- modal body -->
+                <div class="container">
+                    <form [formGroup]="adminDetails" (submit)="loginUser()" id="loginForm"
+                        enctype="multipart/form-data">
+                        <!-- <input type="hidden" name="userid" id="updateId"> -->
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Username:</label>
+                            <input type="text" id="userName" name="username" class="form-control"
+                                placeholder="enter your username" formControlName="username">
+                            @if(getsUername !== null && (getsUername.touched || getsUername.dirty)){
+                            @if(getsUername.errors?.['required']){
+                            <span class="text-danger">username is required</span>
+                            }
+                            @if(getsUername.errors?.['minlength']){
+                            <span class="text-danger">username should be <b>4</b> character long</span>
+                            }
+                            @if(getsUername.errors?.['maxlength']){
+                            <span class="text-danger">character execeded</span>
+                            }
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="passwrod" class="form-label">passwrod:</label>
+                            <input type="passwrod" id="passwrod" name="passwrod" class="form-control"
+                                placeholder="enter passwrod" formControlName="password">
+                            @if(getPassword !== null && (getPassword.touched || getPassword.dirty)){
+                            @if(getPassword.errors?.['required']){
+                            <span class="text-danger">password is required</span>
+                            }
+                            @if(getPassword.errors?.['minlength']){
+                            <span class="text-danger">username should be <b>4</b> character long</span>
+                            }
+                            @if(getPassword.errors?.['maxlength']){
+                            <span class="text-danger">character execeded</span>
+                            }
+                            }
+                        </div>
+                        <div class="mb-3">
+                            <button [disabled]="adminDetails.invalid" class="btn btn-info" type="submit"
+                                data-bs-dismiss="modal">Login</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- modal footer -->
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h1 class="mb-2">Click to Login</h1>
+    <button type="button" class="btn homebtn" data-bs-toggle="modal" data-bs-target="#mymodal">
+        <img src="assets/login1.jpg" alt="image not foud " onerror="this.src='assets/noImageFound.jpg'"
+            class="rounded img-fluid">
+    </button>
+</div>

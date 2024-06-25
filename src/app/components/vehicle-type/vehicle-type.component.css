@@ -1,0 +1,21 @@
+.vehicleList {
+    /* display: flex; */
+    width: 50vw;
+    /* height: 100vh; */
+    
+}
+
+.icons {
+    height: 80px;
+    width: 80px;
+    border-radius: 5px
+}
+.listBox{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+tr:hover{
+    background-color: rgb(251, 247, 247);
+}

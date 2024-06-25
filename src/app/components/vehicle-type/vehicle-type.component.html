@@ -1,0 +1,152 @@
+<div>
+    <div class="modal fade  " id="mymodal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- modal header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Vehicle Type</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <!-- modal body -->
+                <div class="container">
+                    <form [formGroup]="vehicleType" (submit)="addVehicleType()" id="vehicleForm"
+                        enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label for="vehicleName" class="form-label">vehicle Name:</label>
+                            <input type="text" id="vehicleName" name="vehicleName" class="form-control"
+                                placeholder="enter your vehicleName" formControlName="vehicleName">
+                            @if(vehicleName !== null && (vehicleName.touched || vehicleName.dirty)){
+                            @if(vehicleName.errors?.['required']){
+                            <span class="text-danger">Vehicle Name is required.</span>
+                            }
+                            @if(vehicleName.errors?.['minlength']){
+                            <span class="text-danger">Vehicle Name should be <b>2</b> character long.</span>
+                            }
+                            @if(vehicleName.errors?.['maxlength']){
+                            <span class="text-danger">character execeded.</span>
+                            }
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="vehicleIcon" class="form-label">vehicle Icon:</label>
+                            <input type="file" accept="image/*" id="vehicleIcon" name="vehicleIcon"
+                                class="form-control text-danger" (change)="onFileSelected($event)"
+                                placeholder="choose icon" formControlName="vehicleIcon">
+                            @if(vehicleIcon !== null && (vehicleIcon.touched || vehicleIcon.dirty)){
+                            @if(vehicleIcon.errors?.['required']){
+                            <span class="text-danger">file is required.</span> <br>
+                            }
+                            }
+                            <span [hidden]="isSizeOk" class="text-danger">file size must be less then <b>2
+                                    mb</b>.</span>
+
+                        </div>
+                        <div class="mb-3">
+                            <button type="submit" class="btn btn-info">Add</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- modal footer -->
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center my-3">
+        <button class="btn btn-info form-control  " data-bs-toggle="modal" data-bs-target="#mymodal">Add vehicle
+            type</button>
+    </div>
+
+
+
+    <!-- ////////////////////////// edit ///////////////////////// -->
+
+
+    <div class="modal fade  " id="editForm">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Update Vehicle Type</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="container">
+                    <form [formGroup]="editVType" (submit)="editVehicle()" id="vehicleForm"
+                        enctype="multipart/form-data">
+                        <div class="mb-3 mt-2">
+                            <label for="vehicleName" class="form-label">Update vehicle Type :</label>
+                            <input type="text" id="vehicleName" name="vehicleName" class="form-control"
+                                placeholder="enter your vehicleName" formControlName="vehicleName">
+                            @if(editVehicleType !== null && (editVehicleType.touched || editVehicleType.dirty)){
+                            @if(editVehicleType.errors?.['required']){
+                            <span class="text-danger">vehicle name is required.</span>
+                            }
+                            @if(editVehicleType.errors?.['minlength']){
+                            <span class="text-danger">vehicle name should be <b>2</b> character long.</span>
+                            }
+                            @if(editVehicleType.errors?.['maxlength']){
+                            <span class="text-danger">character execeded.</span>
+                            }
+                            }
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="vehicleIcon" class="form-label">Choose New Icon :</label>
+                            <input type="file" accept="image/*" id="vehicleIcon" name="vehicleIcon" class="form-control"
+                                (change)="onFileSelected2($event)" placeholder="choose icon"
+                                formControlName="vehicleIcon">
+
+                            <p class="text-info">Previously uploaded :<b class="text-primary"> {{selectedFile}} </b>
+                            </p>
+
+                            <span [hidden]="isSizeOk2" class="text-danger">file size must be less then <b>2
+                                    mb</b>.</span>
+
+                        </div>
+                        <div class="mb-3">
+                            <button [disabled]="editVType.invalid" type="submit" class="btn btn-warning">Update</button>
+                        </div>
+                    </form>
+                </div>
+                <!-- modal footer -->
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="">
+        <h2 class="m-3 border-bottom">List of Vehicle Types</h2>
+
+        <div class="listBox  py-3 ">
+
+            <table class="overflow-auto vehicleList table border" #vehicleTable>
+                <tr class="border">
+                    <th class="text-center">Vehicle Type</th>
+                    <th class="text-center">Vehicle Icon</th>
+                    <th class="text-center">Edit</th>
+                </tr>
+                @for(vehicle of vehicles ;track vehicle){
+
+                <tr class="mb-5 border-bottom ">
+                    <td class="text-center">
+                        <span>{{ vehicle.vehicleType }}</span>
+                    </td>
+                    <td class="ns m-1 text-center">
+                        <img [src]="'http://localhost:5000/public/vehicleTypes/' + vehicle.vehicleIcon"
+                            onerror="this.src='assets/noImageFound.jpg'" class="my-1 border icons rounded img-fluid "
+                            alt="{{ vehicle.vehicleType }} Icon">
+                    </td>
+                    <td class="text-center">
+                        <button class="btn btn-warning px-3" data-bs-toggle="modal" data-bs-target="#editForm"
+                            (click)="editClicked(vehicle)">Edit</button>
+                    </td>
+                </tr>
+
+                }
+            </table>
+        </div>
+    </div>
+</div>

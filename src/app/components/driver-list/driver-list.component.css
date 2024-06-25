@@ -1,0 +1,37 @@
+.select-small {
+    /* height: 30px;  */
+    width: 180px;
+    /* Adjust the width as needed */
+  }
+  
+  .profile {
+    height: 80px;
+    width: 80px;
+    border-radius: 5px
+  }
+  
+  .select-sort{
+    /* float: inline-; */
+    display: inline;
+    margin-left: 20px;
+    width: 150px;
+    border: 3px solid rgb(213, 213, 214);
+  }
+  
+  .modaldiv {
+    background-color: transparent !important;
+  }
+  
+  .default{
+    border:1px solid green;
+    padding: 3px;
+  }
+  
+  .delete{
+    padding: 4px;
+  }
+
+.vehicleTypeTable{
+  height: 25rem;
+  overflow: auto;
+}

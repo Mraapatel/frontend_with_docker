@@ -1,0 +1,170 @@
+<div>
+    <div class="table-responsive rounded">
+        <div class="d-flex flex-column justify-content-center  ">
+            <h2 class="text-center">Running Requests</h2>
+            <h6 class="text-center">Accept Time Out <span class="text-danger">{{TimeOut}} </span>sec</h6>
+        </div>
+        <table class="table table-responsive shadow">
+
+            <tr>
+                <th class="border text-center p-1 py-2 bg-dark text-white id">User Profile</th>
+                <th class="border text-center p-1 py-2 bg-dark text-white id">User Name</th>
+                <th class="border text-center p-1 py-2 bg-dark text-white">User Phone</th>
+                <th class="border text-center p-1 py-2 bg-dark text-white">Driver Name</th>
+                <th class="border text-center p-1 py-2 bg-dark text-white width">Driver Phone</th>
+                <th class="border text-center p-1 py-2 bg-dark text-white">Pickup Time</th>
+                <th class="border text-center p-1 py-2 bg-dark text-white">Pickup address</th>
+                <th class="border text-center p-1 py-2 bg-dark text-white">Drop off address</th>
+                <th class="border text-center p-1 py-2 bg-dark text-white">Service Type</th>
+                <th class="border text-center p-1 py-2 bg-dark text-white">Service Image</th>
+                <th class="border text-center p-1 py-2 bg-dark text-white">Action</th>
+                <th class="border text-center p-1 py-2 bg-dark text-white">info</th>
+            </tr>
+            @if(runningRequests.length > 0){
+            @for(ride of runningRequests;track $index){
+            <tr>
+                <td class="border text-center p-1 py-2 id">
+                    <img [src]="'http://localhost:5000/public/userProfile/' + ride.userId.userProfile"
+                        onerror="this.src='assets/noImageFound.jpg'" class="my-1 border profile rounded img-fluid "
+                        alt="{{ride.userId.userName }} Icon">
+                </td>
+                <td class="border text-center p-1 py-2 id">{{ride.userId.userName}}</td>
+                <td class="border text-center p-1 py-2">
+                    @if(ride.countryInfo){
+                    {{ride.countryInfo.countryCallingCode}}
+                    }
+                    {{ride.userId.userPhone}}</td>
+                <td class="border text-center p-1 py-2">{{ride.driverId.driverName}}</td>
+                <td class="border text-center p-1 py-2 width">
+                    @if(ride.countryInfo){
+                    {{ride.countryInfo.countryCallingCode}}
+                    }
+                    {{ride.driverId.driverPhone}}</td>
+                <td class="border text-center p-1 py-2 width ">{{ride.date}} {{ride.timeInString}}</td>
+                <td class="border text-center p-1 py-2 width width">{{ride.startLocation}}</td>
+                <td class="border text-center p-1 py-2 width width">{{ride.endLocation}}</td>
+                <td class="border text-center p-1 py-2">{{ride.typeId.vehicleType}}</td>
+                <td class="border text-center p-1 py-2">
+                    <img [src]="'http://localhost:5000/public/vehicleTypes/' + ride.typeId.vehicleIcon"
+                        onerror="this.src='assets/noImageFound.jpg'" class="my-1 border profile rounded img-fluid "
+                        alt="{{ride.typeId.vehicleIcon }} Icon">
+                </td>
+                <td class="border text-center">
+                    <button class="btn btn-success my-2 mx-2"
+                        (click)="driverAcceptedRide(ride._id , ride.driverId._id ,ride.nearest)">Accept</button>
+                    <button class="btn btn-danger"
+                        (click)="driverRejectedRide(ride._id , ride.driverId._id , ride.nearest)">Reject</button>
+                </td>
+                <td class="border text-center">
+                    <button class="btn btn-sm btn-primary mx-2" (click)="rideinfo(ride)" data-bs-toggle="modal"
+                        data-bs-target="#infoModal">Info</button>
+                </td>
+                <!-- <td class="border text-center p-1 py-2">
+                    <button class="btn btn-info" (click)="AssingBtnClicked(ride)" data-bs-toggle="modal"
+                        data-bs-target="#AssignModal">Assign</button>
+                </td>
+                <td class="border text-center  p-1 py-2">
+                    <button class="btn btn-secondary rounded-circle"><b>i</b></button>
+                    <button class="btn btn-danger btn-close"></button>
+                </td> -->
+            </tr>
+            }
+            }
+        </table>
+        @if(runningRequests && runningRequests.length == 0){
+        <div class="container  d-flex justify-content-center text-danger">
+            <h3>No Rides Found</h3>
+        </div>
+        }
+    </div>
+
+
+
+    <div class=" modaldiv modal fade  " id="infoModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content ">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title">Ride Information</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                @if(selectedRidesInfo){
+                <div class="text-center my-1">
+
+                    <img [src]="'http://localhost:5000/public/userProfile/' + selectedRidesInfo.userId.userProfile"
+                        onerror="this.src='assets/noImageFound.jpg'" class="my-1 border profile2 rounded img-fluid "
+                        alt="{{selectedRidesInfo.userId.userName }} Icon">
+                </div>
+                <div class="container table-responsive d-flex justify-content-start">
+                    <table id="InfoTable" class="ms-3">
+
+                        <tr class="text-center">
+
+                        </tr>
+                        <tr>
+                            <th>User Name </th>
+                            <td>: {{selectedRidesInfo.userId.userName}}</td>
+                        </tr>
+                        <tr>
+                            <th>User Phone</th>
+                            <td> : {{selectedRidesInfo.countryInfo.countryCallingCode}}
+                                {{selectedRidesInfo.userId.userPhone}}</td>
+                        </tr>
+                        <tr>
+                            <th>User Email </th>
+                            <td>: {{selectedRidesInfo.userId.userEmail}}</td>
+                        </tr>
+                        <tr>
+                            <th>Book Date</th>
+                            <td>: {{selectedRidesInfo.date}}</td>
+                        </tr>
+                        <tr>
+                            <th>Book Time</th>
+                            <td>: {{selectedRidesInfo.timeInString}}</td>
+                        </tr>
+                        <tr>
+                            <th>PickUp Location </th>
+                            <td>: {{selectedRidesInfo.startLocation}}</td>
+                        </tr>
+                        <tr>
+                            <th>Drop-Off Location </th>
+                            <td>: {{selectedRidesInfo.endLocation}}</td>
+                        </tr>
+                        <tr>
+                            <th>Way Points: </th>
+                            @for(point of selectedRidesInfo.route ;track $index){
+                            <td class="space">:{{$index +1}}-{{point}}</td>
+                            }
+                            @if(selectedRidesInfo.route && selectedRidesInfo.route.length == 0){
+                            <td>: No Way Points for this Ride</td>
+                            }
+                        </tr>
+                        <tr>
+                            <th>Service Type </th>
+                            <td>: {{selectedRidesInfo.typeId.vehicleType}}</td>
+                        </tr>
+                        <tr>
+                            <th>Total Distance </th>
+                            <td>: {{selectedRidesInfo.totalDistance | number:'1.2-2'}} Km</td>
+                        </tr>
+                        <tr>
+                            <th>Estimated Time </th>
+                            <td> : {{selectedRidesInfo.totalTime}} m </td>
+                        </tr>
+                        <tr>
+                            <th>Estimated Fare </th>
+                            <td> : {{selectedRidesInfo.totalFare |number:'1.2-2'}}
+                                {{selectedRidesInfo.countryInfo.currency}}</td>
+                        </tr>
+
+                    </table>
+
+                </div>
+                }
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary shadow" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

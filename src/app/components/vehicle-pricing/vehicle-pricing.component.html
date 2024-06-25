@@ -1,0 +1,582 @@
+<div class="d-flex justify-content-center">
+    <form class="form" [formGroup]="Pricing" (submit)="formSubmit()">
+        <table class="">
+            <div class="row ">
+                <div class="col mb-5">
+                    <tr>
+                        <th>Country</th>
+                        <th>
+                            <select class="mt-2 form-select  " name="country" id="country" #seletedCountry
+                                (change)="seletedC(seletedCountry.value)" formControlName="countryId">
+
+                                <!-- <hr> -->
+                                @for(contry of countryList;track contry.countryName){
+                                <option value="{{contry._id}}+{{contry.country}}">{{ contry.country }}</option>
+                                }
+                            </select>
+                            @if(countryID !== null && (countryID.touched || countryID.dirty)){
+                            @if(countryID.errors?.['required']){
+                            <span class="text-danger" style="font-size: 13px;">Country is required.</span>
+                            }
+                            }
+
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>City</th>
+                        <th>
+                            <select class="mt-2  form-select" name="country" id="city" #seletedCity
+                                (change)="seletedCities(seletedCity.value)" formControlName="cityId">
+
+                                <!-- <hr> -->
+                                @for(city of cityList;track city){
+                                <option value="{{city._id}}+{{city.formatted_address}}">{{ city.formatted_address }}
+                                </option>
+                                }
+                            </select>
+                            @if(cityID !== null && (cityID.touched || cityID.dirty)){
+                            @if(cityID.errors?.['required']){
+                            <span class="text-danger" style="font-size: 13px;">City is required.</span>
+                            }
+                            }
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Type</th>
+                        <th>
+                            <select class="mt-2  form-select" name="country" id="type" #seletedT
+                                (change)="selectedType(seletedT.value)" formControlName="typeId">
+                                <!-- <hr> -->
+                                @for(type of types;track types){
+                                <option value="{{type._id}}+{{type.vehicleType}}">{{type.vehicleType}}</option>
+                                }
+                            </select>
+                            @if(typeID !== null && (typeID.touched || typeID.dirty)){
+                            @if(typeID.errors?.['required']){
+                            <span class="text-danger" style="font-size: 13px;">Type is required.</span>
+                            }
+                            }
+                        </th>
+                    </tr>
+                </div>
+                <div class="col my-2">
+                    <tr>
+                        <th>Driver Profit % :</th>
+                        <th>
+                            <div class="input-group mb-2">
+                                <input class="form-control border" type="number" formControlName="driverProfit" min="0">
+                                <div class="input-group-append centered-container">
+                                    <div class="input-group-text bg-secondary text-white ">?</div>
+                                    <div class="tooltip-container">
+                                        <div class="tooltip-text">The driver profit is the amount of money that a driver
+                                            earns from their gross earnings.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            @if(driverProfit !== null && (driverProfit.touched || driverProfit.dirty)){
+                            @if(driverProfit.errors?.['required']){
+                            <span class="text-danger" style="font-size: 13px;">Driver Profit required.</span>
+                            }
+                            @if(driverProfit.errors?.['min']){
+                            <span class="text-danger" style="font-size: 13px;">Negative values are not allowed.</span>
+                            }
+                            @if(driverProfit.errors?.['outOfRange']){
+                            <span class="text-danger" style="font-size: 13px;">Percentage can't be more than 100.</span>
+                            }
+                            @if(driverProfit.errors?.['multipleDecimalPoints']){
+                            <span class="text-danger" style="font-size: 13px;">must have single point(.).</span>
+                            }
+                            }
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Min. Fare</th>
+                        <th>
+                            <div class="input-group mb-2 ">
+                                <input class="form-control border " type="number" formControlName="minFare" min="0"
+                                    onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                                <div class="input-group-append centered-container">
+                                    <div class="input-group-text bg-secondary text-white ">?</div>
+                                    <div class="tooltip-container">
+                                        <div class="tooltip-text"> The unit time price is the amount that a rider is
+                                            charged for each minute that they spend in the vehicle
+                                            during a ride.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            @if(minFare !== null && (minFare.touched || minFare.dirty)){
+                            @if(minFare.errors?.['required']){
+                            <span class="text-danger" style="font-size: 13px;">Min. Fare is required.</span>
+                            }
+                            @if(minFare.errors?.['min']){
+
+                            <span class="text-danger" style="font-size: 13px;">Negative values are not allowed.</span>
+                            }
+                            }
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Distance for Base Price</th>
+                        <th>
+                            <div class="input-group mb-2 ">
+                                <input class="form-control border" type="number" formControlName="distanceForBasePrice"
+                                    min="0" onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+
+                                <div class="input-group-append centered-container">
+                                    <div class="input-group-text bg-secondary text-white ">?</div>
+                                    <div class="tooltip-container">
+                                        <div class="tooltip-text">The base price distance is a predetermined distance
+                                            that user can travel with base price.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            @if(distanceForBasePrice !== null && (distanceForBasePrice.touched ||
+                            distanceForBasePrice.dirty)){
+                            @if(distanceForBasePrice.errors?.['required']){
+                            <span class="text-danger" style="font-size: 13px; display: inline;">Distance for Base Price
+                                is required.</span>
+                            }
+                            @if(distanceForBasePrice.errors?.['min']){
+                            <span class="text-danger" style="font-size: 13px;">Negative values are not allowed.</span>
+                            }
+                            }
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Base Price</th>
+                        <th>
+                            <div class="input-group mb-2 ">
+                                <input class="form-control border" type="number" formControlName="basePrice" min="0"
+                                    onkeypress="return event.charCode >= 48 && event.charCode <= 57">
+                                <div class="input-group-append centered-container">
+                                    <div class="input-group-text bg-secondary text-white ">?</div>
+                                    <div class="tooltip-container">
+                                        <div class="tooltip-text">The base price is a predetermined amount that a rider
+                                            is
+                                            charged as soon as the ride starts.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            @if(basePrice !== null && (basePrice.touched ||
+                            basePrice.dirty)){
+                            @if(basePrice.errors?.['required']){
+                            <span class="text-danger" style="font-size: 13px;">Base Price is required.</span>
+                            }
+                            @if(basePrice.errors?.['min']){
+                            <span class="text-danger" style="font-size: 13px;">Negative values are not allowed.</span>
+                            }
+                            }
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Price Per Unit Distance</th>
+                        <th>
+                            <div class="input-group mb-2 ">
+                                <input class="form-control border" type="number" formControlName="pricePerUnitDistance"
+                                    min="0">
+                                <div class="input-group-append centered-container">
+                                    <div class="input-group-text bg-secondary text-white ">?</div>
+                                    <div class="tooltip-container">
+                                        <div class="tooltip-text"> The unit distance price is the amount that a rider is
+                                            charged for each mile or kilometer traveled after
+                                            base price distance.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            @if(pricePerUnitDistance !== null && (pricePerUnitDistance.touched ||
+                            pricePerUnitDistance.dirty)){
+                            @if(pricePerUnitDistance.errors?.['required']){
+                            <span class="text-danger" style="font-size: 13px;">Price Per Unit Distance is
+                                required.</span>
+                            }
+                            @if(pricePerUnitDistance.errors?.['min']){
+                            <span class="text-danger" style="font-size: 13px;">Negative values are not allowed.</span>
+                            }
+                            }
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Price Per Unit Time (min)</th>
+                        <th>
+                            <div class="input-group mb-2 ">
+
+                                <input class="form-control border" type="number" formControlName="pricePerUnitTime_Min"
+                                    min="0">
+                                <div class="input-group-append centered-container">
+                                    <div class="input-group-text bg-secondary text-white ">?</div>
+                                    <div class="tooltip-container">
+                                        <div class="tooltip-text">The unit time price is the amount that a rider is
+                                            charged for each minute that they spend in the vehicle
+                                            during a ride.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            @if(pricePerUnitTime_Min !== null && (pricePerUnitTime_Min.touched ||
+                            pricePerUnitTime_Min.dirty)){
+                            @if(pricePerUnitTime_Min.errors?.['required']){
+                            <span class="text-danger" style="font-size: 13px;">Price Per Unit Time required.</span>
+                            }
+                            @if(pricePerUnitTime_Min.errors?.['min']){
+                            <span class="text-danger" style="font-size: 13px;">Negative values are not allowed.</span>
+                            }
+                            }
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>Max Space</th>
+                        <th>
+                            <!-- <input class="form-control border mt-1" type="number" formControlName="maxSpace" min="0"> -->
+                            <div class="input-group mb-2 ">
+
+                                <select class="form-control" name="maxSpace" id="maxSpace" formControlName="maxSpace">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                </select>
+
+                                <div class="input-group-append centered-container">
+                                    <div class="input-group-text bg-secondary text-white ">?</div>
+                                    <div class="tooltip-container">
+                                        <div class="tooltip-text">The base price is a predetermined amount that a rider
+                                            is
+                                            charged as soon as the ride starts.</div>
+                                    </div>
+                                </div>
+                            </div>
+                            @if(maxSpace !== null && (maxSpace.touched ||maxSpace.dirty)){
+                            @if(maxSpace.errors?.['required']){
+                            <span class="text-danger" style="font-size: 13px;">Max Space required.</span>
+                            }
+                            @if(maxSpace.errors?.['min']){
+                            <span class="text-danger" style="font-size: 13px;">Negative values are not allowed.</span>
+                            }
+                            }
+                        </th>
+                    </tr>
+                </div>
+            </div>
+            <!-- <tr>
+                <th>Country</th>
+                <th>
+                    <select class="mt-2 form-select " name="country" id="country" #seletedCountry
+                        (change)="seletedC(seletedCountry.value)" formControlName="countryId">
+                        <option>Choose Country below</option>
+                        <hr>
+                        @for(contry of countryList;track contry.countryName){
+                        <option value="{{contry._id}}+{{contry.country}}">{{ contry.country }}</option>
+                        }
+                    </select>
+                </th>
+            </tr>
+            <tr>
+                <th>City</th>
+                <th>
+                    <select class="mt-2  form-select" name="country" id="city" #seletedCity
+                        (change)="seletedCities(seletedCity.value)" formControlName="cityId">
+                        <option>Choose City below</option>
+                        <hr>
+                        @for(city of cityList;track city){
+                        <option value="{{city._id}}+{{city.formatted_address}}">{{ city.formatted_address }}</option>
+                        }
+                    </select>
+                </th>
+            </tr>
+            <tr>
+                <th>Type</th>
+                <th>
+                    <select class="mt-2  form-select" name="country" id="type" #seletedT
+                        (change)="selectedType(seletedT.value)" formControlName="typeId">
+                        <option>Choose Type below</option>
+                        <hr>
+                        @for(type of types;track types){
+                        <option value="{{type._id}}+{{type.vehicleType}}">{{type.vehicleType}}</option>
+                        }
+                    </select>
+                </th>
+            </tr> -->
+
+            <!-- <tr>
+                <th>Driver Profit</th>
+                <th>
+                    <input class="form-control border mt-1" type="number" formControlName="driverProfit">
+                </th>
+            </tr>
+            <tr>
+                <th>Min. Fare</th>
+                <th>
+                    <input class="form-control border mt-1" type="number" formControlName="minFare">
+                </th>
+            </tr>
+            <tr>
+                <th>Distance for Base Price</th>
+                <th>
+                    <input class="form-control border mt-1" type="number" formControlName="distanceForBasePrice">
+                </th>
+            </tr>
+            <tr>
+                <th>Base Price</th>
+                <th>
+                    <input class="form-control border mt-1" type="number" formControlName="basePrice">
+                </th>
+            </tr>
+            <tr>
+                <th>Price Per Unit Distance</th>
+                <th>
+                    <input class="form-control border mt-1" type="number" formControlName="pricePerUnitDistance">
+                </th>
+            </tr>
+            <tr>
+                <th>Price Per Unit Time (min)</th>
+                <th>
+                    <input class="form-control border mt-1" type="number" formControlName="pricePerUnitTime_Min">
+                </th>
+            </tr>
+            <tr>
+                <th>Max Space</th>
+                <th>
+                    <input class="form-control border mt-1" type="number" formControlName="maxSpace">
+                </th>
+            </tr> -->
+        </table>
+
+        <div class="mb-3 d-flex">
+            <button type="submit" class="btn my-3 me-4  btn-info form-control">Add</button>
+            <div class="btn my-3  btn-warning form-control" (click)="Pricing.reset()">clear</div>
+        </div>
+    </form>
+</div>
+
+<div class="table-responsive ">
+    <table class="table table-striped table-hover border  hover">
+        <thead class=" table-dark">
+
+            <tr class="text-center bg-dark text-white">
+                <th class="py-2 border">Country</th>
+                <th class="py-2 border">City</th>
+                <th class="py-2 border">Vehicle Type</th>
+                <th class="py-2 border">Price Per Unit Distance</th>
+                <th class="py-2 border">Price Per Unit Time_Min</th>
+                <th class="py-2 border">Min. Fare</th>
+                <th class="py-2 border">Base Price</th>
+                <th class="py-2 border">Driver Profit</th>
+                <th class="py-2 border">Distance For Base Price</th>
+                <th class="py-2 border">Max Space</th>
+                <th class="py-2 border">edit</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @for(price of PricingList ;track price){
+            <tr class="border text-center">
+                <td class="py-1 border">{{price.countryId.country}}</td>
+                <td class="py-1 border">{{price.cityId.formatted_address}} </td>
+                <td class="py-1 border">{{price.typeId.vehicleType}}</td>
+                <td class="py-1 border">{{price.pricePerUnitDistance}} {{price.countryId.currency}}</td>
+                <td class="py-1 border">{{price.pricePerUnitTime_Min}} {{price.countryId.currency}}</td>
+                <td class="py-1 border">{{price.minFare}} {{price.countryId.currency}}</td>
+                <td class="py-1 border">{{price.basePrice}} {{price.countryId.currency}}</td>
+                <td class="py-1 border">{{price.driverProfit}} %</td>
+                <td class="py-1 border">{{price.distanceForBasePrice}} km</td>
+                <td class="py-1 border">{{price.maxSpace}}</td>
+                <!-- <button class=" btn btn-info btn-sm my-2" (click)="editBtnClicked(price)" data-bs-toggle="modal" data-bs-target="#editForm">edit</button> -->
+                <td>
+                    <button class="btn btn-warning btn-sm px-3 my-2 me-1 edit shadow" data-bs-toggle="modal"
+                        data-bs-target="#editModal" (click)="editBtnClicked(price)">Edit</button>
+                </td>
+            </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+
+<div class="modal fade" id="editModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- modal header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Update Price</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <!-- modal body -->
+            <div class="container">
+                <form [formGroup]="editPrice" (submit)="updateEditedPrice()" id="editForm"
+                    enctype="multipart/form-data">
+                    <!-- <div class="mb-3">
+                        <label for="driverProfit" class="form-label">Driver Profit:</label>
+                        <input class="form-control-sm-sm border mt-1" type="number" id="driverProfit"
+                            formControlName="driverProfit">
+                    </div>
+                    <div class="mb-3">
+                        <label for="minFare" class="form-label">Min Fare:</label>
+                        <input class="form-control-sm border mt-1" type="number" id="minFare" formControlName="minFare">
+                    </div>
+                    <div class="mb-3">
+                        <label for="distanceForBasePrice" class="form-label">Distance for Base Price:</label>
+                        <input class="form-control-sm border mt-1" type="number" id="distanceForBasePrice"
+                            formControlName="distanceForBasePrice">
+                    </div>
+                    <div class="mb-3">
+                        <label for="basePrice" class="form-label">Base Price:</label>
+                        <input class="form-control-sm border mt-1" type="number" id="basePrice"
+                            formControlName="basePrice">
+                    </div>
+                    <div class="mb-3">
+                        <label for="pricePerUnitDistance" class="form-label">Price per Unit Distance:</label>
+                        <input class="form-control-sm border mt-1" type="number" id="pricePerUnitDistance"
+                            formControlName="pricePerUnitDistance">
+                    </div>
+                    <div class="mb-3">
+                        <label for="pricePerUnitTime_Min" class="form-label">Price per Unit Time (Min):</label>
+                        <input class="form-control-sm border mt-1" type="number" id="pricePerUnitTime_Min"
+                            formControlName="pricePerUnitTime_Min">
+                    </div>
+                    <div class="mb-3">
+                        <label for="maxSpace" class="form-label">Max Space:</label>
+                        <input class="form-control-sm border mt-1" type="text" id="maxSpace" formControlName="maxSpace">
+                    </div>
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-info" data-bs-dismiss="modal">Add</button>
+                    </div> -->
+                    <table class="table">
+                        <tr>
+                            <td>Country:</td>
+                            <td>
+                                <select class="form-select-sm" style="width: 175px;" name="country" id="country"
+                                    [disabled]="true">
+                                    <option value="country" [disabled]="true">{{country}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>City:</td>
+                            <td>
+                                <select class="form-select-sm" style="width: 175px;" name="country" id="country"
+                                    [disabled]="true">
+                                    <option value="country" [disabled]="true">{{city}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Type:</td>
+                            <td>
+                                <select class="form-select-sm" style="width: 175px;" name="country" id="country"
+                                    [disabled]="true">
+                                    <option value="country" [disabled]="true">{{type}}</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Driver Profit:</td>
+                            <td>
+                                <input class="form-control-sm border mt-1" type="number" id="driverProfit"
+                                    formControlName="driverProfit" min="0">
+                                <br>
+                                @if(driverProfit2?.dirty){
+                                @if(driverProfit2?.errors?.['min']){
+                                <span class="text-danger">Negative values are not allowed.</span>
+                                }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Min Fare:</td>
+                            <td>
+                                <input class="form-control-sm border mt-1" type="number" id="minFare"
+                                    formControlName="minFare" min="0">
+                                <br>
+                                @if(minFare2?.dirty){
+                                @if(minFare2?.errors?.['min']){
+                                <span class="text-danger">Negative values are not allowed.</span>
+                                }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Distance for Base Price:</td>
+                            <td>
+                                <input class="form-control-sm border mt-1" type="number" id="distanceForBasePrice"
+                                    formControlName="distanceForBasePrice" min="0">
+                                <br>
+                                @if(distanceForBasePrice2?.dirty){
+                                @if(distanceForBasePrice2?.errors?.['min']){
+                                <span class="text-danger">Negative values are not allowed.</span>
+                                }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Base Price:</td>
+                            <td>
+                                <input class="form-control-sm border mt-1" type="number" id="basePrice"
+                                    formControlName="basePrice" min="0">
+                                <br>
+                                @if(basePrice2?.dirty){
+                                @if(basePrice2?.errors?.['min']){
+                                <span class="text-danger">Negative values are not allowed.</span>
+                                }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Price per Unit Distance:</td>
+                            <td>
+                                <input class="form-control-sm border mt-1" type="number" id="pricePerUnitDistance"
+                                    formControlName="pricePerUnitDistance" min="0">
+                                <br>
+                                @if(pricePerUnitDistance2?.dirty){
+                                @if(pricePerUnitDistance2?.errors?.['min']){
+                                <span class="text-danger">Negative values are not allowed.</span>
+                                }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Price per Unit Time (Min):</td>
+                            <td> <input class="form-control-sm border mt-1" type="number" id="pricePerUnitTime_Min"
+                                    formControlName="pricePerUnitTime_Min" min="0">
+
+                                <br>
+                                @if(pricePerUnitTime_Min2?.dirty){
+                                @if(pricePerUnitTime_Min2?.errors?.['min']){
+                                <span class="text-danger">Negative values are not allowed.</span>
+                                }
+                                }
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Max Space:</td>
+                            <td>
+                                <input class="form-control-sm border mt-1" type="number" id="maxSpace"
+                                    formControlName="maxSpace" min="0">
+
+                                <br>
+                                @if(maxSpace2?.dirty){
+                                @if(maxSpace2?.errors?.['min']){
+                                <span class="text-danger">Negative values are not allowed.</span>
+                                }
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <button type="submit" class="btn form-control mt-3 btn-warning"
+                                    data-bs-dismiss="modal">Update</button>
+                            </td>
+                        </tr>
+                    </table>
+
+                </form>
+
+            </div>
+            <!-- modal footer -->
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,167 @@
+<div class="body ">
+  <div class="nevbar bg-dark text-white me-0">
+    <div class="bg-dark text-white py-2 ">
+      <div class="btn-container ps-1 ">
+        <button type="button" class="btn btn-sm my-1 me-5 btn-primary position-relative">
+          <img src="assets/notificatioIcon.png" class="  img-fluid img-thumbnail rounded " alt="imageno found "
+            height="40px" onerror="this.src='assets/noImageFound.jpg'" width="40px" />
+          @if(count > 0){
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            {{count}}
+            <span class="visually-hidden">unread messages</span>
+          </span>
+          }
+        </button>
+
+        <button class="py-2 btn btn-warning " type="button" (click)="logOut()">
+          <img src="assets/userlogo.png" class="  img-fluid img-thumbnail rounded " alt="imageno found " height="40px"
+            onerror="this.src='assets/noImageFound.jpg'" width="40px" />
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class=" row p-0 m-0 sectionInner" style="margin-top: -20px;">
+      <div class="sidebar col col-xxl-2 col-xl-2 col-lg-3 col-md-4 col-sm-12 col-xs-12 col-12 bg-dark text-white">
+        <!-- <div class=" setting my-3">
+          @if(_loaderService.spinnerCounter){
+           <div>djkkkkkkkkkkkkk</div>
+          }
+        </div> -->
+        <div class="ps-3 my-3 ">
+          <h4>Rides</h4>
+          <ul class="mt-2 ">
+            <li routerLinkActive="active"> <a routerLink="createRide">
+                <h5 class="pt-1">Create Ride</h5>
+              </a>
+            </li>
+            <li routerLinkActive="active"> <a routerLink="confirmRide">
+                <h5 class="pt-1">Confirm Rides</h5>
+              </a>
+            </li>
+            <li routerLinkActive="active"> <a routerLink="rideHistory">
+                <h5 class="pt-1">Ride History</h5>
+              </a>
+            </li>
+          </ul>
+
+        </div>
+        <div class=" usercss my-3">
+          <li routerLinkActive="active"> <a routerLink="user">
+              <h4 class="pt-1">User</h4>
+            </a>
+          </li>
+        </div>
+        <div class="ps-3 my-3 h4">
+          <h4>Drivers</h4>
+          <ul class="mt-2 ">
+            <li routerLinkActive="active"> <a routerLink="driverList">
+                <h5 class="pt-1">List</h5>
+              </a>
+            </li>
+            <li routerLinkActive="active"> <a routerLink="runningRequest">
+                <h5 class="pt-1">Running Request</h5>
+              </a>
+            </li>
+          </ul>
+
+        </div>
+        <div class="ps-3 my-3 h4">
+          <h4>Pricing</h4>
+          <ul class="mt-2 ">
+            <li routerLinkActive="active"> <a routerLink="add_country">
+                <h5 class="pt-1">Country</h5>
+              </a>
+            </li>
+            <li routerLinkActive="active"> <a routerLink="city">
+                <h5 class="pt-1">City</h5>
+              </a>
+            </li>
+            <li routerLinkActive="active"> <a routerLink="vehicle_type">
+                <h5 class="pt-1">Vehicle type</h5>
+              </a>
+            </li>
+            <li routerLinkActive="active"> <a routerLink="Vehicle_Pricing">
+                <h5 class="pt-1">Vehicle Pricing</h5>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div class=" setting my-3">
+          <li routerLinkActive="active"> <a routerLink="setting">
+              <h4 class="pt-1">Setting</h4>
+            </a>
+          </li>
+          <!-- <li>
+            <button (click)="start()">start</button>
+          </li> -->
+        </div>
+
+
+
+      </div>
+      <div class=" m-0 content   col col-xxl-10 col-xl-10 col-lg-9 col-md-8 col-sm-12 col-xs-12 col-12 pt-4 px-4 ">
+        <!-- <app-admin></app-admin> -->
+        <!-- @if(_loaderService.spinnerCounter){
+        <div class="overlay show">
+          <div class="spinner-border" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        } -->
+
+        <!-- @if(_loaderService.spinnerCounter){ -->
+        <!-- <span>{{_loaderService.spinnerCounter}}</span> -->
+        <!-- <h1></h1> -->
+        <!-- <div class="overlay show">
+          <div class="spinner-border" role="status"> -->
+        <!-- <mat-progress-spinner></mat-progress-spinner>
+          </div>
+        </div> -->
+        <!-- } -->
+
+        <!-- <div class="spinnerconent" *ngIf="_loaderService.spinnerCounter">
+          <div class="spinnerclass">
+            <mat-progress-spinner color="black" value="50" mode="indeterminate"></mat-progress-spinner>
+          </div>
+        </div> -->
+      
+        <!-- <div class="spinnerconent" *ngIf="_loaderService.spinnerCounter">
+          <div class="spinnerclass">
+            <div class="spinner">
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
+        </div> -->
+       
+        <div class="spinnerconent" *ngIf="_loaderService.spinnerCounter" >
+          <div class="spinnerclass">
+            <div class="spinner text-center wrapper ">
+              <!-- <div class="wrapper"> -->
+              <div class="circle"></div>
+              <div class="circle"></div>
+              <div class="circle"></div>
+              <div class="shadow"></div>
+              <div class="shadow"></div>
+              <div class="shadow"></div>
+            <!-- </div> -->
+            </div>
+          </div>
+        </div>
+        
+
+
+
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+</div>

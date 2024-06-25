@@ -1,0 +1,242 @@
+<div>
+    <div class="row">
+
+
+        <div class="container mt-3 border-right col col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12">
+            <h3 class="text-primary">Ride Settings</h3>
+            <form [formGroup]="Setting" (submit)="storeSetting()">
+                <table class="table">
+                    <tr>
+                        <th>Seconds for the driver to accept the Request:</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="mt-2 form-select border-primary  " name="timeOut" id="timeOut"
+                                #seletedSeconds formControlName="timeOut">
+                                @if(cuttentSetting){
+                                <option value="10" [selected]="cuttentSetting.TimeOut == 10">10 seconds</option>
+                                <option value="20" [selected]="cuttentSetting.TimeOut == 20">20 seconds</option>
+                                <option value="30" [selected]="cuttentSetting.TimeOut == 30">30 seconds</option>
+                                <option value="45" [selected]="cuttentSetting.TimeOut == 45">45 seconds</option>
+                                <option value="60" [selected]="cuttentSetting.TimeOut == 60">60 seconds</option>
+                                <option value="90" [selected]="cuttentSetting.TimeOut == 90">90 seconds</option>
+                                <option value="120" [selected]="cuttentSetting.TimeOut == 120">120 seconds</option>
+                                }@else{
+                                <option value="10">10 seconds</option>
+                                <option value="20">20 seconds</option>
+                                <option value="30">30 seconds</option>
+                                <option value="45">45 seconds</option>
+                                <option value="60">60 seconds</option>
+                                <option value="90">90 seconds</option>
+                                <option value="120">120 seconds</option>
+                                }
+                            </select>
+
+                        </td>
+                    </tr>
+                    <br>
+                    <tr class="my-2">
+                        <th>Number of Stops:</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <select class="mt-2 form-select border-primary" name="stops" id="stops" #seletedStops
+                                formControlName="stops">
+                                @if(cuttentSetting){
+                                <option value="1" [selected]="cuttentSetting.Stops == 1">1 stop</option>
+                                <option value="2" [selected]="cuttentSetting.Stops == 2">2 stops</option>
+                                <option value="3" [selected]="cuttentSetting.Stops == 3">3 stops</option>
+                                <option value="4" [selected]="cuttentSetting.Stops == 4">4 stops</option>
+                                <option value="5" [selected]="cuttentSetting.Stops == 5">5 stops</option>
+                                }@else{
+                                <option value="1">1 stop</option>
+                                <option value="2">2 stops</option>
+                                <option value="3">3 stops</option>
+                                <option value="4">4 stops</option>
+                                <option value="5">5 stops</option>
+                                }
+                            </select>
+                        </td>
+                    </tr>
+                </table>
+
+                <button type="submit" class="btn my-3 btn-primary form-control">Update</button>
+            </form>
+        </div>
+        <!-- <span class="line"></span> -->
+
+
+        <!-- stripe -->
+        <div class=" container mt-3  col col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12">
+            <h3 class="text-success">Stripe Keys</h3>
+            <form [formGroup]="Stripe" (submit)="storeDetails('stripe')" class="mt-3">
+                <table class="table">
+                    <tr>
+                        <th>Stripe Secreate Key:</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class=" mt-1 form-control border-success" type="password" name="secreateKey"
+                                id="secreateKey" formControlName="secreateKey">
+                            @if(Stripe.get('secreateKey')?.errors && Stripe.get('secreateKey')?.touched){
+                            @if(Stripe.get('secreateKey')?.errors?.['required']){
+                            <span class="text-danger">Please enter the secreate key</span> <br>
+                            }
+                            @if(Stripe.get('secreateKey')?.errors?.['minlength']){
+                            <span class="text-danger"> Minimun length should be <b>107</b> </span> <br>
+                            }
+                            @if(Stripe.get('secreateKey')?.errors?.['maxlength']){
+                            <span class="text-danger">Maximum length should be <b>107</b> </span>
+                            }
+                            }
+                        </td>
+                    </tr>
+                    <br>
+                    <tr class="my-2">
+                        <th>Stripe Public key:</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class="form-control mt-1 border-success  " type="text" name="publicKey"
+                                id="publicKey" formControlName="publicKey">
+                            @if(Stripe.get('publicKey')?.errors && Stripe.get('publicKey')?.touched){
+                            @if(Stripe.get('publicKey')?.errors?.['required']){
+                            <span class="text-danger">Please enter the secreate key</span> <br>
+                            }
+                            @if(Stripe.get('publicKey')?.errors?.['minlength']){
+                            <span class="text-danger"> Minimun length should be <b>107</b> </span> <br>
+                            }
+                            @if(Stripe.get('publicKey')?.errors?.['maxlength']){
+                            <span class="text-danger">Maximum length should be <b>107</b> </span>
+                            }
+                            }
+                        </td>
+                    </tr>
+                </table>
+
+                <button type="submit" class="btn my-3 btn-success form-control">Update</button>
+            </form>
+        </div>
+
+
+    </div>
+    <hr>
+    <div class="row">
+        <!-- twilio -->
+        <div class="container mt-3 border-right col col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12">
+            <h3 class="text-danger">Twilio Cradentials</h3>
+            <form [formGroup]="Twilio" (submit)="storeDetails('twilio')">
+                <table class="table">
+                    <tr>
+                        <th>TWILIO SID:</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class=" mt-1 form-control border-danger" type="text" name="sid" id="sid"
+                                formControlName="sid">
+                            @if(Twilio.get('sid')?.errors && Twilio.get('sid')?.touched){
+                            @if(Twilio.get('sid')?.errors?.['required']){
+                            <span class="text-danger">Please enter the sid </span> <br>
+                            }
+                            @if(Twilio.get('sid')?.errors?.['minlength']){
+                            <span class="text-danger"> Minimun length should be <b>34</b> </span> <br>
+                            }
+                            @if(Twilio.get('sid')?.errors?.['maxlength']){
+                            <span class="text-danger">Maximum length should be <b>34</b> </span>
+                            }
+                            }
+                        </td>
+                    </tr>
+                    <br>
+                    <tr class="my-2">
+                        <th>TWILIO AUTH TOKEN:</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class=" mt-1 form-control border-danger" type="password" name="authToken" id="authToken"
+                                formControlName="authToken">
+                            @if(Twilio.get('authToken')?.errors && Twilio.get('authToken')?.touched){
+                            @if(Twilio.get('authToken')?.errors?.['required']){
+                            <span class="text-danger">Please enter the AuthToken</span> <br>
+                            }
+                            @if(Twilio.get('authToken')?.errors?.['minlength']){
+                            <span class="text-danger"> Minimun length should be <b>32</b> </span> <br>
+                            }
+                            @if(Twilio.get('authToken')?.errors?.['maxlength']){
+                            <span class="text-danger">Maximum length should be <b>32</b> </span>
+                            }
+                            }
+                        </td>
+                    </tr>
+                    <br>
+                    <tr class="my-2">
+                        <th>TWILIO PHONE NUMBER:</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class=" mt-1 form-control border-danger" type="text" name="phoneNumber"
+                                id="phoneNumber" formControlName="phoneNumber">
+                            @if(Twilio.get('phoneNumber')?.errors && Twilio.get('phoneNumber')?.touched){
+                            @if(Twilio.get('phoneNumber')?.errors?.['required']){
+                            <span class="text-danger">Please enter the Phone Number</span> <br>
+                            }
+                            @if(Twilio.get('phoneNumber')?.errors?.['minlength']){
+                            <span class="text-danger"> Minimun length should be <b>10</b> </span> <br>
+                            }
+                            @if(Twilio.get('phoneNumber')?.errors?.['maxlength']){
+                            <span class="text-danger">Maximum length should be <b>10</b> </span>
+                            }
+                            }
+                        </td>
+                    </tr>
+                </table>
+
+                <button type="submit" class="btn my-3 btn-danger form-control">Update</button>
+            </form>
+        </div>
+
+        <!-- email -->
+        <div class=" container mt-3  col col-xxl-6 col-xl-6 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12">
+            <h3 class="text-warning">Email Cradentials</h3>
+            <form [formGroup]="Email" (submit)="storeDetails('email')" class="mt-2">
+                <table class="table">
+                    <tr>
+                        <th>Email :</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class=" mt-1 form-control border-warning" type="text" name="email" id="email"
+                                formControlName="email">
+                            @if(Email.get('email')?.errors && Email.get('email')?.touched){
+                            @if(Email.get('email')?.errors?.['required']){
+                            <span class="text-danger">Please enter the Email</span> <br>
+                            }
+                            }
+
+                        </td>
+                    </tr>
+                    <br>
+                    <tr class="my-2">
+                        <th>Password:</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input class="form-control mt-1 border-warning " type="password" name="password"
+                                id="password" formControlName="password">
+                            @if(Email.get('email')?.errors && Email.get('email')?.touched){
+                            @if(Email.get('email')?.errors?.['required']){
+                            <span class="text-danger">Please enter the Email</span> <br>
+                            }
+                            }
+                        </td>
+                    </tr>
+                </table>
+
+                <button type="submit" class="btn my-3 btn-warning form-control">Update</button>
+            </form>
+        </div>
+
+
+    </div>
+
+</div>

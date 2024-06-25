@@ -1,0 +1,285 @@
+<div class="row">
+    <div class="col  col-xxl-4 col-xl-4 col-lg-4 col-md-12 col-sm-12 col-xs-12 col-12 mb-4">
+        @if(!addPlaces){
+        <form [formGroup]="userForm" class="shadow px-3 rounded pb-3">
+
+            <div class="mb-3">
+                <label for="userPhone" class="form-label"><b>Enter your Phone no. <sup
+                            class="text-danger ">*</sup>:</b></label>
+                <div class="input-group">
+                    <select class="select-small border " name="countryCallingCode" formControlName="countryCC">
+                        @for(code of CountryCodes ;track code){
+                        <option class="bg-dark text-white" value="{{code.country._id}}+{{code.country.countryCode2}}">
+                            {{code.country.countryCallingCode}}
+                            ({{code.country.country}})</option>
+                        }
+                    </select>
+                    <input type="text" class="form-control" id="userPhone" formControlName="userPhone">
+                </div>
+                @if(userPhone !== null && (userPhone.touched || userPhone.dirty)){
+                @if(userPhone.errors?.['required']){
+                <span class="text-danger">userPhone is required.</span>
+                }
+                @if(userPhone.errors?.['minlength']){
+                <span class="text-danger">userPhone should be <b>10</b> character long.</span>
+                }
+                @if(userPhone.errors?.['maxlength']){
+                <span class="text-danger">character execeded.</span>
+                }
+                }
+            </div>
+
+            <button class="btn btn-info my-1 shadow" (click)="searchUser()">Search</button>
+            @if(showDetails){
+            <button class="btn btn-warning my-1 mx-3 shadow" (click)="Clear()">Clear</button>
+            }
+
+            @if(showDetails){
+            <div class="d-flex justify-content-center shadow my-2 mb-6 rounded">
+                <table class="my-2 table-responsive">
+                    <tr>
+                        <th> User Name: </th>
+                        <td>{{gotUser?.userName}}</td>
+                    </tr>
+                    <tr>
+                        <th> User Email: </th>
+                        <td>{{gotUser?.userEmail}}</td>
+                    </tr>
+                    <tr>
+                        <th> User Phone: </th>
+                        <td>{{gotUser?.userPhone}}</td>
+
+                    </tr>
+                </table>
+            </div>
+            }
+
+        </form>
+        @if(showDetails){
+        <div class="d-flex justify-content-end align-item-center my-2 ">
+            <button class="btn btn-success shadow" (click)="getTheLocations()">Next</button>
+        </div>
+        }
+        }
+        @if(addPlaces){
+      
+        <form [formGroup]="locationForm" id="locationForm" class="shadow p-3 rounded">
+            <div>
+                <label for="form-location">Form:</label>
+                <!-- <input type="text" class="form-control" name="form" id="form-location" (focus)="TurnAutocomplete()" -->
+                <input type="text" class="form-control" name="form" id="form-location" formControlName="form"
+                    #StartPoint>
+                @if(locationForm.get('form')?.errors && locationForm.get('form')?.touched){
+                @if(locationForm.get('form')?.errors?.['required']){
+                <span class="text-danger">Please Select the starting Location</span> <br>
+                }
+                }
+
+            </div>
+            <div>
+                <label for="to-location">To:</label>
+                <input type="text" class="form-control" name="to" id="to-location" formControlName="to" #EndPoint>
+                @if(locationForm.get('to')?.errors && locationForm.get('to')?.touched){
+                @if(locationForm.get('to')?.errors?.['required']){
+                <span class="text-danger">Please Select the End Location</span> <br>
+                }
+                }
+            </div>
+            <!-- <div>
+                <div formArrayName="inputfileds">
+                    @for(input of inputfileds.controls;track input;let i = $index){
+                        <div class="input-group my-3">
+                            <input type="text" class="form-control stops" name="i" [id]="i+1" [formControlName]="i">
+                            <button class="btn btn-sm btn-danger" (click)="removeStop(i)">Delete</button>
+                        </div>
+                    }
+                </div>
+            </div> -->
+
+            <label for="stops" class="mt-4">stops:</label>
+            <div class="input-group ">
+                <input type="text" class="form-control rounded" name="stops" id="stops" formControlName="stops" #Stops>
+
+                <div class="btn btn-dark text-white ms-2 rounded" (click)="addNewStop()">Add Stops</div>
+            </div>
+        </form>
+
+
+        @for(stop of STOPS;track $index){
+        <div class="input-group my-4 ">
+            <div class="border form-control shadow owerflow-auto">
+                <span>{{stop}}</span>
+            </div>
+            <button class="btn btn-danger ms-2 rounded  text-white shadow" (click)="removeStop(stop)"><i
+                    class="fa fa-trash"></i>Remove</button>
+
+        </div>
+        }
+
+        <div class="text-end mt-4">
+            <button class="btn btn-success text-white" (click)="calculateRide()">Calculte</button>
+        </div>
+        <!-- </div> -->
+        }
+
+    </div>
+
+    <div id="map" class=" mapBox shadow col  col-xxl-8 col-xl-8 col-lg-8 col-md-12 col-sm-12 col-xs-12 col-12">
+
+    </div>
+
+    @if(showOverView){  
+
+    <div class="container   mt-4 rounded shadow p-1">
+        <div class=" rounded shadow-start ">
+            @if(totalTime){
+            <div class="text-center mb-1">
+                <div class="w-50 d-inline-block text-end border-bottom"> Estimated Distance: </div>
+                <div class="w-50 d-inline-block text-start border-bottom"> <b class="text-primary"> &nbsp;
+                        {{totalDistance | number:'1.2-2'}} km</b></div>
+
+                <!-- estimated Distance: <b class="text-primary">{{totalDistance}}</b></div> -->
+
+
+                <div class="text-center mb-1">
+                    <div class="w-50 d-inline-block text-end border-bottom"> Estimated time: </div>
+                    <div class="w-50 d-inline-block text-start border-bottom"> <b class="text-primary">&nbsp;
+                            {{totalTime.hours}}</b> hours
+                        <b class="text-primary">{{totalTime.minutes}}</b> minutes
+                    </div>
+                    <!-- estimated time: <b class="text-primary">{{totalTime.hours}}</b> hours <b
+                        class="text-primary">{{totalTime.minutes}}</b> minutes</div> -->
+                </div>
+            </div>
+
+            }
+            <div class="text-center">
+                @if(PriceListWithVehicleTypes){
+                @for(price of PriceListWithVehicleTypes;track $index){
+                <div class="text-center mb-1">
+                    <div class="w-50 d-inline-block text-end border-bottom">Total Fare with - <b>{{price.type}}</b> :
+                    </div>
+                    <div class="w-50 d-inline-block text-start border-bottom"><b class="text-primary">&nbsp;
+                            {{price.totalPrice | number:'1.2-2'}}</b></div>
+                </div>
+                }
+
+                }
+            </div>
+        </div>
+
+    </div>
+    <div class="container   mt-4 rounded shadow p-1">
+        <div>
+            <form [formGroup]="bookRideForm">
+                <div class="border my-1 p-1">
+                    <label for="serviceType">Select Service Type:</label><br>
+                    <select name="serviceType" id="serviceType" formControlName="serviceType" class="selecttype border">
+                        @for(obj of cityPricingOfTypes;track $index){
+                        <option value="{{obj.typeId._id}}"> {{obj.typeId.vehicleType}} </option>
+                        }
+                    </select>
+                    @if(bookRideForm.get('serviceType')?.errors && bookRideForm.get('serviceType')?.touched){
+                    @if(bookRideForm.get('serviceType')?.errors?.['required']){
+                    <br><span class="text-danger">Please Select the Service Type</span> <br>
+                    }
+                    }
+                </div>
+                <div class="text-center border p-1">
+                    <div class="text-center">Select Payment Method:</div>
+                    <label class="mx-3">
+                        <input type="radio" name="paymentMethod" formControlName="paymentMethod" value="cash">
+                        Cash
+                    </label>
+                    <!-- <label class="mx-3">
+                        <input type="radio" name="paymentMethod" formControlName="paymentMethod" value="card">
+                        Card
+                    </label> -->
+                    @if(UserCards.length > 0){
+                    <label class="mx-3">
+                        <input type="radio" name="paymentMethod" formControlName="paymentMethod" value="card">
+                        Card
+                    </label>
+                    }
+
+                    @if(bookRideForm.get('paymentMethod')?.errors && bookRideForm.get('paymentMethod')?.touched){
+                    @if(bookRideForm.get('paymentMethod')?.errors?.['required']){
+                    <br><span class="text-danger">Please select the payment Method</span> <br>
+                    }
+                    }
+
+                </div>
+                <div class="text-center border p-2">
+                    <!-- <div class="text-center">Select Payment Method:</div> -->
+                    <label class="mx-3">
+                        <!-- <input type="radio" name="bookStatus" formControlName="bookStatus" value="now"> -->
+                        <input type="radio" name="bookStatus" formControlName="bookStatus" value="now">
+                        Book now
+                    </label>
+                    <label class="mx-3">
+                        <!-- <input type="radio" name="bookStatus" formControlName="bookStatus" value="schedule" [checked]="scheduleSelected()"> -->
+                        <input type="radio" name="bookStatus" formControlName="bookStatus" value="schedule">
+                        Schedule
+                    </label>
+
+                    @if(bookRideForm.get('bookStatus')?.errors && bookRideForm.get('bookStatus')?.touched){
+                    @if(bookRideForm.get('bookStatus')?.errors?.['required']){
+                    <br><span class="text-danger">Please make choise</span> <br>
+                    }
+                    }
+
+                    <!-- <div class="mt-2">
+                        <button class="btn btn-success" (click)="BookRide()">Book Ride</button>
+                    </div> -->
+                </div>
+
+                @if(bookRideForm.get('bookStatus')?.value === 'schedule' ){
+                <div class="d-flex ">
+                    <input type="date" class="form-control m-2 " formControlName="bookingDate" (input)="dateSelected()">
+                    <input type="time" class="form-control m-2 " formControlName="booktime">
+                </div>
+                <div class="d-flex">
+                    <div class="d-inline-block w-50 ms-3">
+                        @if(bookRideForm.get('bookingDate')?.errors && bookRideForm.get('bookingDate')?.touched){
+                        @if(bookRideForm.get('bookingDate')?.errors?.['required']){
+                        <span class="text-danger">Please choose the <b>Date</b> of Journey</span> <br>
+                        }
+                        @if(bookRideForm.get('bookingDate')?.errors?.['dateIsGone']){
+                        <span class="text-danger">Please choose the date From <b>now</b> </span> <br>
+                        }
+                        @if(bookRideForm.get('bookingDate')?.errors?.['dateIsExceded']){
+                        <span class="text-danger">Please choose the date between <b>now</b> and one <b>month form
+                                now</b> </span>
+                        }
+                        }
+                    </div>
+                    <div class="d-inline-block w-50 ms-3">
+                        @if(bookRideForm.get('booktime')?.errors && bookRideForm.get('booktime')?.touched ){
+                        @if(bookRideForm.get('booktime')?.errors?.['required']){
+                        <span class="text-danger">Please choose the time of Journey</span> <br>
+                        }
+                        @if(bookRideForm.get('booktime')?.errors?.['timeIsBeforeNow']){
+                        <span class="text-danger">Please choose the <b>time</b> From <b>now</b> </span> <br>
+                        }
+                        @if(bookRideForm.get('booktime')?.errors?.['selectDateFirst']){
+                        <span class="text-danger">Please select <b>Date</b> first </span> <br>
+                        }
+
+                        }
+                    </div>
+                </div>
+                }
+
+                <div class="mt-2 text-center    ">
+                    <button class="btn btn-success shadow" (click)="BookRide()">Book Ride</button>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+    }
+
+
+
+</div>
