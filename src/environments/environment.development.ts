@@ -1,5 +1,5 @@
 const PORT = 4000
-const IP = `13.201.27.47`
+const IP = `13.233.196.10`
 
 export const environment = {
     // API_KEY:'AIzaSyDYsyV5pA4yp5CQQku2HGkROac9ZbwvcE0'
