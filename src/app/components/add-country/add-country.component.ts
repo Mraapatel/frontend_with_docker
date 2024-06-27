@@ -14,7 +14,7 @@ interface Country {
   currency: string;
   flagSymbol: string;
   timeZone: string;
-  __v: number;
+  // __v: number;
 }
 
 @Component({
